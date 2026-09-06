@@ -1,0 +1,152 @@
+.drawer {
+            height: 100%;
+            width: 320px;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: -320px; 
+            /*background-image: url('../../_assets/images/RyanLogoBG_3.png');*/
+            background-color: black;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            transition: left 0.3s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .drawer-a {
+            z-index: 10000;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .menu-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 15px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .menu-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #page-wrapper {
+            width: 100%;
+            height: 100vh;
+            transition: width 0.3s ease, margin-left 0.3s ease;
+            position: relative;
+            background-image: url('../../_assets/images/RyanLogoBG_3.png');
+            background-size: cover;
+            background-position: center;
+            left: -3px;
+        }
+
+        body.drawer-open .drawer {
+            left: 0;
+        }
+
+        body.drawer-open #page-wrapper {
+            width: calc(100% - 320px);
+            margin-left: 315px;
+        }
+
+        .home {
+            background: rgba(0, 0, 0, 0);
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px; 
+            z-index: 900;
+            transition: opacity 0.3s;
+            padding: 0px;
+        }
+
+        .home-link {
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .home-link img {
+            background: rgba(0, 0, 0, 0.3);
+            display: block;
+        }
+
+        .home img {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .hamburger {
+            font-size: 28px;
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            color: white;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 80px; 
+            z-index: 900;
+            padding: 5px 12px;
+            border-radius: 5px;
+            transition: opacity 0.3s;
+        }
+
+        body.drawer-open #page-wrapper .home {
+            opacity: 0;
+            pointer-events: none;
+        }       
+
+        body.drawer-open #page-wrapper .hamburger {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body {
+            display: flex;
+            flex-direction: row;
+        }
+
+        body.drawer-open #page-wrapper {
+            width: calc(100% - 320px);
+            margin-left: 320px;
+        }
+
+        @media (max-width: 768px) {
+            body.drawer-open #page-wrapper {
+                width: 0%;
+            }
+            .drawer {
+                width: 100%;
+                left: -100%;
+            }
+            body.drawer-open .drawer {
+                left: 0;
+            }
+        }

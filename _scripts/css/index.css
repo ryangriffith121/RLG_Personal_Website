@@ -1,0 +1,90 @@
+﻿* {
+    box-sizing: border-box;
+}
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+            overflow-x: hidden; 
+        }
+
+        header {
+            background-color: #00000000;
+            animation: fadeIn2 3.0s ease-in-out;
+        }
+
+        body {
+            font-family: "Instrument Sans", sans-serif;
+            text-shadow: 1px 0px 20px black;
+            display: flex;
+        }
+
+        #index-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            /* remove background-image, background-repeat, background-attachment, background-size */
+            position: relative;
+            text-align: center;
+        }
+
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        #index-content, #footer {
+            position: relative;
+            z-index: 1; /* keeps text above the canvas */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; margin-bottom: 70px; }
+            to { opacity: 1; margin-bottom: 0px; }
+        }
+
+        @keyframes fadeIn2 {
+            0% { opacity: 0; }
+            55% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #index-content h1 {
+            margin: 0;
+            line-height: 1;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        #index-content h2 {
+            animation: fadeIn2 2.5s ease-in-out;
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            animation: fadeIn2 3.0s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            #index-content h1 { font-size: 60px !important; }
+            #index-content h2 { font-size: 24px !important; }
+            body.drawer-open #page-wrapper {
+                width: 0%; 
+            }
+            .drawer {
+                width: 100%;
+                right: -100%;
+            }
+        }

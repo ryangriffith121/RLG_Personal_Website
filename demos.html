@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan's Portfolio</title>
+    <meta name="author" content="Ryan L. Griffith"/>
+
+    <link rel="shortcut icon" href="_assets/icons/logov2_web.ico" />
+    <link rel="icon" href="_assets/icons/logov2_weblarge.png" type="image/png" sizes="300x300" />
+    <link rel="apple-touch-icon" sizes="150x150" href="_assets/icons/logov2_webmedium.png" />
+    <link rel="apple-touch-icon" sizes="75x75" href="_assets/icons/logov2_websmall.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="_scripts\css\drawer.css" rel="stylesheet"/>
+    <link href="_scripts\css\demos.css" rel="stylesheet"/>
+    
+</head>
+
+<body>
+    
+    <nav class="drawer" id="drawer">
+        <div class="drawer-header">
+            <a href="index.html" class="home" style="opacity: 1;">
+                <img src="_assets\icons\logov2_websmall.png" alt="Home" style="width: 50px; height: 50px;">
+            </a>
+            <button class="close-btn" id="close-btn" aria-label="Close Menu">&times;</button>
+        </div>
+        <div class="menu-links">
+            <a href="index.html">Home</a>
+            <a href="portfolio.php?filter=recent">Portfolio</a>
+            <a href="about.html">About Me</a>
+            <a href="demos.html">Demos</a>
+        </div>
+    </nav>
+    
+    <div id="page-wrapper">
+        <header>
+            <a href="index.html" class="home">
+                <img src="_assets\icons\logov2_websmall.png" alt="Home" style="width: 50px; height: 50px;">
+            </a>
+            <button class="hamburger" id="hamburger">☰</button>
+        </header>
+
+        <section id="portfolio">
+            <h2 style="font-size: 35px;">Demos</h2>
+            <p>Welcome to my demos! Here, you'll find a collection of interactive demonstrations, experiments, and games...</p>
+        </section>
+        
+        <section id="portfolio">
+            <div class="portfolio-grid">
+                <div class="project-card" data-link="Demos\gatsby_game\greatgatsby.html">
+                    <img src="_assets\portfolio\_thumbnails\density2.png">
+                        <div class="project-info">
+                            <h3>Density</h3>
+                            <p>A small Pico 8 game that makes use of procedural generation and primative enemy AI pathfinding...</p>
+                        </div>
+                </div>
+                <div class="project-card" data-link="Demos\gatsby_game\greatgatsby.html">
+                    <img src="_assets\portfolio\_thumbnails\greatgatsbygame_8.png">
+                        <div class="project-info">
+                            <h3>Great Gatsby Game</h3>
+                            <p>A small Pico-8 game that roughly follows the plot of the classic novel The Great Gatsby…</p>
+                        </div>
+                </div>
+                <div class="project-card" data-link="Demos\rotation_simulator\rotationsim.html">
+                    <img src="_assets\portfolio\_thumbnails\anglecircle.png">
+                        <div class="project-info">
+                            <h3>Rotation Simulator</h3>
+                            <p>A small simulator made in the Pico 8 game engine meant to test the path rotating arms...</p>
+                        </div>
+                </div>
+                <div class="project-card" data-link="Demos\the_kingdom\kingdom.html">
+                    <img src="_assets\portfolio\_thumbnails\kingdom.png">
+                        <div class="project-info">
+                            <h3>The Kingdom</h3>
+                            <p>A small game made in the Pico 8 game engine and submission to Bigmode 2025 Game Jam...</p>
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Copyright © <span id="year"></span></p>
+        </footer>
+    </div>
+
+    <script src="_scripts\js\drawer.js"></script>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        function goToFilter(id) {
+            window.location.href = "portfolio.php?filter=" + id;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const hamburger = document.getElementById("hamburger");
+            const menu = document.getElementById("menu");
+
+            hamburger.addEventListener("click", function () {
+                menu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+                    menu.classList.remove("show");
+                }
+            });
+
+            const projects = document.querySelectorAll(".project-card");
+
+            projects.forEach(card => {
+                card.addEventListener("click", function () {
+                    const link = this.getAttribute("data-link");
+                    if (link) {
+                        window.location.href = link;
+                    }
+                });
+            });
+
+    
+        });
+    </script>
+
+</body>
+</html>

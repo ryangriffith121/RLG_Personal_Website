@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Ryan L. Griffith</title>
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Ryan L. Griffith" />
+
+    <link rel="shortcut icon" href="_assets\icons\logov2_web.ico" />
+    <link rel="icon" href="_assets\icons\logov2_weblarge.png" type="image/png" sizes="300x300" />
+    <link rel="apple-touch-icon" sizes="150x150" href="_assets\icons\logov2_webmedium.png" />
+    <link rel="apple-touch-icon" sizes="75x75" href="_assets\icons\logov2_websmall.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
+    <link href="_scripts\css\about.css" rel="stylesheet" />
+    <link href="_scripts\css\drawer.css" rel="stylesheet" />
+</head>
+
+<body onload="pageLoad()">
+    
+    <nav class="drawer" id="drawer">
+        <div class="drawer-header">
+            <a href="index.html" class="home" style="opacity: 1;">
+                <img src="_assets\icons\logov2_websmall.png" alt="Home" style="width: 50px; height: 50px;">
+            </a>
+            <button class="close-btn" id="close-btn" aria-label="Close Menu">&times;</button>
+        </div>
+        <div class="menu-links">
+            <a href="index.html">Home</a>
+            <a href="portfolio.php?filter=recent">Portfolio</a>
+            <a href="about.html">About Me</a>
+            <a href="demos.html">Demos</a>
+        </div>
+    </nav>
+
+    <div id="page-wrapper">
+
+        <header>
+            <a href="index.html" class="home">
+                <img src="_assets\icons\logov2_websmall.png" alt="Home" style="width: 50px; height: 50px;">
+            </a>
+            <button class="hamburger" id="hamburger">☰</button>
+        </header>
+
+        <h1>About Me</h1>
+
+        <br><br>
+
+        <div class="bubble">
+            <div class="container">
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <div class="slide"><img src="_assets\images\aboutmephoto.png" alt="Ryan L. Griffith"></div>
+                    </div>
+                </div>
+
+                <div class="side-text">
+                    <Label>Who is Ryan L. Griffith?</Label>
+                    <h4>
+                        Ryan is a driven, intellectually curious person who approaches the world with a maker's instinct and a scientist's need to understand not just what is true, but why and how we know. He is the kind of person who encounters a problem, whether technical, ethical, or creative, and responds by building something. That impulse isn't purely academic; it's rooted in a genuine desire to make things better, more trustworthy, and more accessible to others.
+                        <br><br>
+                        Technically, Ryan is fluent across an unusually wide range of disciplines. He is comfortable in software and hardware alike, moving between programming, circuit design, mechanical fabrication, CAD modeling, machine learning, and digital art with confidence and curiosity. He doesn't specialize narrowly. He connects domains, bringing an engineer's rigor to creative work and a designer's eye to technical problems. The result is a body of work that is as varied as it is accomplished.
+                        <br><br>
+                        What motivates Ryan runs deeper than personal achievement. He is drawn to questions with real-world stakes, problems at the intersection of technology and society where thoughtful solutions can have meaningful impact. He is also motivated by the people around him. He invests in communities, supports peers, and consistently prioritizes the success of the group alongside his own. Leadership, for Ryan, is less about standing out and more about making sure others have the space and support to contribute.
+                        <br><br>
+                        In terms of character, those who work alongside Ryan consistently describe the same qualities: patience, calm, reliability, and kindness. He is the person a team turns to when things get difficult, not because he has all the answers, but because he stays steady, listens carefully, and works through problems methodically rather than reactively. He is self-motivated and disciplined, but never at the expense of the people around him.
+                        <br><br>
+                        Ryan's combination of technical depth, creative range, ethical awareness, and genuine collaborative spirit makes him someone who will contribute meaningfully to any environment he enters and who will make that environment better for everyone in it.
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Copyright © <span id="year"></span></p>
+        </footer>
+
+    </div>
+    <script src="_scripts\js\drawer.js"></script>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+</body>

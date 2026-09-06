@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan L. Griffith</title>
+
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Ryan L. Griffith" />
+
+    <link rel="shortcut icon" href="_assets\icons\logov2_web.ico" />
+    <link rel="icon" href="_assets\icons\logov2_weblarge.png" type="image/png" sizes="300x300" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <link href="_scripts\css\drawer.css" rel="stylesheet" />
+    <link href="_scripts\css\index.css" rel="stylesheet" />`
+    
+</head>
+
+<body onload="if(typeof pageLoad === 'function') pageLoad()">
+    
+    <nav class="drawer" id="drawer" style="background-image: url('../_assets/images/RyanLogoBG_3.png');">
+        <div class="drawer-header">
+            <a href="index.html" class="home" style="opacity: 1;">
+                <img src="_assets\icons\logov2_websmall.png" alt="Home" style="width: 50px; height: 50px;">
+            </a>
+            <button class="close-btn" id="close-btn" aria-label="Close Menu">&times;</button>
+        </div>
+        <div class="menu-links">
+            <a href="index.html">Home</a>
+            <a href="portfolio.php?filter=recent">Portfolio</a>
+            <a href="about.html">About Me</a>
+            <a href="demos.html">Demos</a>
+        </div>
+    </nav>
+
+    <div id="page-wrapper">
+        <canvas id="bg-canvas"></canvas>
+
+        <header>
+            <a href="index.html" class="home">
+                <img src="_assets\icons\logov2_websmall.png" alt="Home" style="width: 50px; height: 50px;">
+            </a>
+            <button class="hamburger" id="hamburger">☰</button>
+
+        </header>
+
+        <script src="_scripts\js\index.js"></script>
+
+        <div id="index-wrapper">
+            
+            <div id="index-content">
+                <h1 style="color: white; font-size: 100px; font-weight: 800;">Ryan L. Griffith</h1>
+                <h2 style="color: white; font-size: 40px; font-weight: 600;">Programmer | Engineer | Artist</h2>
+            </div>
+            
+            <div id="footer" style="color: rgb(221, 221, 221); font-weight: 400;">
+                <footer style="text-decoration: none;">Copyright © <span id="year">2024</span></footer>
+                &nbsp;|&nbsp;
+                <a href="index.php" style="color: white; text-decoration: none; font-weight: 600;">RyanLGriffith.com</a>
+                &nbsp;|&nbsp;
+                <footer style="text-decoration: none;">All Rights Reserved</footer>
+            </div>
+        </div>
+    </div>
+
+    <script src="_scripts\js\pageLoad.js"></script>
+
+    <script src="_scripts\js\drawer.js"></script>
+
+</body>
+</html>
