@@ -196,7 +196,7 @@ label {
     color: #fff;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     .container {
         flex-direction: column;
         align-items: center;
@@ -207,7 +207,6 @@ label {
     .carousel-container {
         width: 100%;
         max-width: 100%;
-        margin-top: 50px;
     }
 
     .side-text {

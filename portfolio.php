@@ -86,16 +86,14 @@ $projects = $stmt->fetchAll();
 
         <section id="portfolio">
             <h2 style="font-size: 40px;">Portfolio</h2>
-        </section>
 
-        <section id="portfolio-type-selector">
             <div id="filter-buttons">
                 <button id="project-btn" class="active">Projects</button>
                 <button id="certificate-btn">Certifications</button>
             </div>  
         </section>
 
-        <section id="portfolio-projects-description">
+        <section id="portfolio-certifications-description">
             <p>Welcome to my certification portfolio! Here, you'll find various certifications and achievements that I have earned and received through my studies and professional development.</p>
         </section>
 
@@ -115,7 +113,7 @@ $projects = $stmt->fetchAll();
             <hr>
 
             <div id="filter-buttons">
-                <button data-filter="all" class="active">Show All</button>
+                <button data-filter="all" id="showall" class="active">Show All</button>
                 <button data-filter="featured">Featured</button>
                 <button data-filter="program">Programming</button>
                 <button data-filter="art">Art</button>
@@ -131,34 +129,33 @@ $projects = $stmt->fetchAll();
                     <div class="certificate-card">
                         <div class="certificate-info">
                             <h3>Python PCEP Certificate</h3>
-                            <p>Earned: April 2025</p>
+                            <p style="margin-bottom: 10px;">Earned: April 2025</p>
                         </div>
-                        <img src="_assets\portfolio\_thumbnails\skull2026_3_2.png" alt="Python PCEP Certificate - Ryan Griffith">
-                        <p> Earned through Test...</p>
+                        <img src="_assets\portfolio\_certs\python.png" alt="Python PCEP Certificate - Ryan Griffith">
                     </div>
 
                     <div class="certificate-card">
-                        <img src="_assets\portfolio\_thumbnails\skull2026_3_2.png" alt="AWS Solutions Architect - Associate Certification - Ryan Griffith">
                         <div class="certificate-info">
-                            <h3>AWS Solutions Architect - Associate</h3>
-                            <p>Earned: January 2024</p>
+                            <h3>Adobe Certified Professional Certificate</h3>
+                            <p style="margin-bottom: 10px;">Earned: September 2024</p>
                         </div>
+                        <img src="_assets\portfolio\_certs\photoshop.png" alt="Adobe Certified Professional Certificate - Ryan Griffith">
                     </div>
 
                     <div class="certificate-card">
-                        <img src="_assets\portfolio\_thumbnails\skull2026_3_2.png" alt="AWS Solutions Architect - Associate Certification - Ryan Griffith">
                         <div class="certificate-info">
-                            <h3>AWS Solutions Architect - Associate</h3>
-                            <p>Earned: January 2024</p>
+                            <h3>Solidworks Design Associate Certificate</h3>
+                            <p style="margin-bottom: 10px;">Earned: March 2023</p>
                         </div>
+                        <img src="_assets\portfolio\_certs\solidworks.png" alt="Solidworks Design Associate Certificate - Ryan Griffith">
                     </div>
 
                     <div class="certificate-card">
-                        <img src="assets\portfolio\_thumbnails\skull2026_3_2.png" alt="AWS Solutions Architect - Associate Certification - Ryan Griffith">
                         <div class="certificate-info">
-                            <h3>AWS Solutions Architect - Associate</h3>
-                            <p>Earned: January 2024</p>
+                            <h3>Autodesk Certified User: Inventor Certificate</h3>
+                            <p style="margin-bottom: 10px;">Earned: October 2022</p>
                         </div>
+                        <img src="_assets\portfolio\_certs\inventor.png" alt="Autodesk Certified User: Inventor Certificate - Ryan Griffith">
                     </div>
 
                 </section>
@@ -230,37 +227,20 @@ $projects = $stmt->fetchAll();
             const menu = document.getElementById("menu");
             const certificate_btn = document.getElementById("certificate-btn");
             const project_btn = document.getElementById("project-btn");
+            
+            const filterButtons = document.querySelectorAll("#filter-buttons button");
+            const projects = document.querySelectorAll(".project-card");
 
             hamburger.addEventListener("click", function () {
                 menu.classList.toggle("show");
             });
 
-            certificate_btn.addEventListener("click", function () {
-                document.getElementById("certificate-info").style.visibility = "visible";
-                document.getElementById("project-info").style.visibility = "hidden";
-                document.getElementById("certificates").style.visibility = "visible";
-                document.getElementById("projects").style.visibility = "hidden";
-                certificate_btn.classList.add("active");
-                project_btn.classList.remove("active");
-            });
-
-            project_btn.addEventListener("click", function () {
-                document.getElementById("certificate-info").style.visibility = "hidden";
-                document.getElementById("project-info").style.visibility = "visible";
-                document.getElementById("certificates").style.visibility = "hidden";
-                document.getElementById("projects").style.visibility = "visible";
-                project_btn.classList.add("active");
-                certificate_btn.classList.remove("active");
-            });
 
             document.addEventListener("click", function (event) {
                 if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
                     menu.classList.remove("show");
                 }
             });
-
-            const filterButtons = document.querySelectorAll("#filter-buttons button");
-            const projects = document.querySelectorAll(".project-card");
 
             projects.forEach(card => {
                 card.addEventListener("click", function () {
@@ -291,6 +271,26 @@ $projects = $stmt->fetchAll();
                         }
                     });
                 });
+            });
+
+            
+            certificate_btn.addEventListener("click", function () {
+                document.getElementById("portfolio-certifications-description").style.display = "block";
+                document.getElementById("portfolio-projects-description").style.display = "none";
+                document.getElementById("certificates").style.display = "flex";
+                document.getElementById("projects").style.display = "none";
+                certificate_btn.classList.add("active");
+                project_btn.classList.remove("active");
+            });
+
+            project_btn.addEventListener("click", function () {
+                document.getElementById("portfolio-certifications-description").style.display = "none";
+                document.getElementById("portfolio-projects-description").style.display = "block";
+                document.getElementById("certificates").style.display = "none";
+                document.getElementById("projects").style.display = "flex";
+                document.getElementById("showall").click();
+                certificate_btn.classList.remove("active");
+                project_btn.classList.add("active");
             });
         });
     </script>
