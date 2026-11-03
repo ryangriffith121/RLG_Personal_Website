@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Index — Ryan L. Griffith</title>
+  <meta name="description" content="Every project by Ryan L. Griffith since 2023, colour-coded by discipline. Filter, sort and search.">
+  <meta name="theme-color" content="#412db5">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/spectrum.css">
+</head>
+<body data-page="work">
+<main id="main">
+  <header class="ihead t-indigo">
+    <h1 class="ihead__word"><span class="fit" data-fit data-max="380">Index</span></h1>
+    <div class="ihead__sub"><p class="mono">Every project since January 2023, coloured by discipline</p><p class="mono">Indigo programming · Chartreuse engineering · Pink art</p></div>
+  </header>
+  <div class="controls t-grey">
+    <div class="pills" id="chips" role="group" aria-label="Filter by discipline"></div>
+    <div class="tools">
+      <label class="field"><span class="sr-only">Search projects</span><input id="q" type="search" placeholder="Search projects" autocomplete="off"></label>
+      <label class="field field--sel"><span class="sr-only">Sort projects</span><select id="sort"><option value="recent">Newest first</option><option value="oldest">Oldest first</option><option value="az">A – Z</option><option value="za">Z – A</option></select></label>
+      <div class="seg" role="group" aria-label="View"><button type="button" data-view="grid" aria-pressed="true">Mosaic</button><button type="button" data-view="list" aria-pressed="false">List</button></div>
+    </div>
+  </div>
+  <p class="result-line mono" id="result" aria-live="polite"></p>
+  <div class="results" id="results"></div>
+
+  <section class="t-grey" aria-labelledby="cert-title">
+    <div class="shead"><h2 class="h2" id="cert-title">Certified.</h2><p class="mono">Earned 2022–2025 · click to enlarge</p></div>
+    <div class="stickers" id="certs"></div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="js/spectrum.js"></script>
+</body>
+</html>

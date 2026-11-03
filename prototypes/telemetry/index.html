@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ryan L. Griffith — Mission Control</title>
+  <meta name="description" content="Ryan L. Griffith: programmer, engineer and artist. 32 projects logged since 2023, from a Cherenkov detector at DESY to software 3D renderers.">
+  <meta name="theme-color" content="#0a0b0f">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/telemetry.css">
+</head>
+<body data-page="home">
+<main id="main">
+  <section class="hero" aria-labelledby="hero-name">
+    <div class="detector" data-detector></div>
+    <div class="hud">
+      <div class="hud__block mono"><span class="sig">● Live · Cherenkov ring simulation</span><span class="dim">Beam e⁻ 6 GeV/c · n = 1.47 · θc 47.1°</span></div>
+      <div class="hud__block mono" aria-hidden="true"><span>Beam angle <b data-ro="angle">00.0°</b></span><span>Photon hits <b data-ro="hits">0</b></span><span>Ring Ø <b data-ro="ring">0 cells</b></span><span>Aim <b data-ro="beam">55, 50</b></span></div>
+    </div>
+    <div class="hero__name">
+      <p class="mono dim">RLG-OS · Personnel 001 · Boulder, Colorado</p>
+      <h1 class="disp" id="hero-name" style="margin-top:14px"><span>Ryan L.</span><span>Griffith</span></h1>
+      <div class="hero__roles">
+        <span class="sr-only">Programmer, engineer and artist.</span>
+        <span class="typed" id="typed" aria-hidden="true"></span>
+        <span class="mono dim">CS · CU Boulder &nbsp;·&nbsp; BL4S 2026 winning team</span>
+      </div>
+      <div class="hero__ctas">
+        <a class="btn btn--sig" href="work.html">Open mission log <span aria-hidden="true">→</span></a>
+        <a class="btn" href="demos.html">Run a simulation</a>
+      </div>
+    </div>
+    <div class="hero__foot mono dim">
+      <span class="hide-touch">Move your pointer to steer the beam</span>
+      <span>Scroll ↓</span>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="status-title">
+    <div class="sec__head"><div><p class="sec__kicker mono"><i class="led"></i>System status · nominal</p><h2 class="h-sec" id="status-title">Telemetry.</h2></div></div>
+    <div class="stats" data-reveal>
+      <div class="stat"><b><span data-count-key="projects">32</span></b><span class="mono">Projects logged</span></div>
+      <div class="stat"><b><span data-count-key="years">4</span> yrs</b><span class="mono">Of building, 2023–2026</span></div>
+      <div class="stat"><b><span data-count-key="demos">5</span></b><span class="mono">Playable demos</span></div>
+      <div class="stat"><b><span data-count-key="certs">4</span></b><span class="mono">Certifications</span></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="log-title">
+    <div class="sec__head"><div><p class="sec__kicker mono"><i class="led"></i>Latest entries</p><h2 class="h-sec" id="log-title">Mission log.</h2></div>
+      <a class="btn" href="work.html">Full log · <span data-count-key="projects">32</span> <span aria-hidden="true">→</span></a></div>
+    <div id="log" data-reveal></div>
+  </section>
+
+  <section class="sec" aria-labelledby="bay-title">
+    <div class="sec__head"><div><p class="sec__kicker mono"><i class="led"></i>Featured payloads</p><h2 class="h-sec" id="bay-title">Payload bay.</h2></div>
+      <div class="rail-ctrl"><button type="button" data-rail="prev" aria-label="Scroll payloads left">←</button><button type="button" data-rail="next" aria-label="Scroll payloads right">→</button></div></div>
+    <div class="rail-wrap"><div class="rail" id="rail" tabindex="0" aria-label="Featured projects"></div></div>
+  </section>
+
+  <section class="sec" aria-labelledby="traj-title">
+    <div class="sec__head"><div><p class="sec__kicker mono"><i class="led"></i>Every project, by date</p><h2 class="h-sec" id="traj-title">Trajectory.</h2></div></div>
+    <div class="traj" id="traj"><div class="traj__axis" aria-hidden="true"></div><div id="traj-marks"></div><div class="traj__tip mono" id="traj-tip" role="status"></div></div>
+    <div class="traj-legend mono dim" aria-hidden="true"><span><i style="background:#8173cc"></i>Programming</span><span><i style="background:#e9ff97"></i>Engineering</span><span><i style="background:#e5197f"></i>Art</span></div>
+    <div class="traj-years" id="traj-years"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="person-title">
+    <div class="person">
+      <div class="scan" id="person-img" style="position:relative">
+        <i class="corners" data-decor aria-hidden="true"></i>
+      </div>
+      <div>
+        <p class="sec__kicker mono"><i class="led"></i>Personnel file 001</p>
+        <h2 class="h-sec" id="person-title">Maker's instinct. Scientist's questions.</h2>
+        <p class="person__lede" style="margin-top:24px">Ryan encounters a problem, whether technical, ethical or creative, and responds by building something. Software and hardware, circuits and CAD, machine learning and digital art.</p>
+        <div class="hero__ctas"><a class="btn btn--sig" href="about.html">Open personnel file <span aria-hidden="true">→</span></a></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/detector.js"></script>
+<script src="js/telemetry.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arcade — Ryan L. Griffith</title>
+  <meta name="description" content="Play Ryan L. Griffith's PICO-8 games in the browser.">
+  <meta name="theme-color" content="#e5197f">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/spectrum.css">
+</head>
+<body data-page="demos">
+<main id="main">
+  <header class="ihead t-pink">
+    <h1 class="ihead__word"><span class="fit" data-fit data-max="380">Arcade</span></h1>
+    <div class="ihead__sub"><p class="mono">Five PICO-8 cartridges, playable in the browser</p><p class="mono">Arrows to move · Z and X to act</p></div>
+  </header>
+  <div class="t-grey" style="padding-top:clamp(24px,3vw,40px)">
+    <div class="arcade">
+      <ul class="carts" id="carts" aria-label="Cartridges"></ul>
+      <section aria-label="Player">
+        <div class="bezel">
+          <div class="bezel__bar"><span class="mono" id="bz-title"></span>
+            <div class="bezel__btns"><button type="button" id="bz-full">Fullscreen</button><a id="bz-open" href="#" target="_blank" rel="noopener">New tab ↗</a></div></div>
+          <div class="screen" id="screen"></div>
+        </div>
+        <div class="arcade__info"><p id="arcade-blurb"></p><a class="btn" id="arcade-link" href="#">Project page <span class="arr" aria-hidden="true">→</span></a></div>
+      </section>
+    </div>
+  </div>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="js/spectrum.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+{
+  "_note": "Projects that are not in _data/portfolio.db yet, plus text for database rows that are empty. Copy is drafted from each project's README; review before publishing.",
+  "fill": {
+    "custom-calc": {
+      "description": "A scratch-built calculator: a 30-pin ESP32 development board, 20 Cherry MX-style keys and a 4-inch ST7796S TFT on a custom 153.5 × 83.5 mm KiCad board, inside a case modeled in SolidWorks. The 20 keys share nine GPIO pins as a 5 × 4 matrix. The firmware pulls one row low at a time, reads the four pulled-up columns with a 10 ms debounce, and drives the display over SPI with the TFT_eSPI library. A September 2026 board revision moved two pins: GPIO35 is input-only, and GPIO12 is a strapping pin sampled at boot.",
+      "highlights": [
+        "ESP32 dev board, 20 keys in a 5 × 4 matrix on 9 GPIO",
+        "4\" ST7796S TFT, 480 × 320, SPI at 80 MHz",
+        "153.5 × 83.5 mm two-layer KiCad board",
+        "SolidWorks case: body, key plate, base, bezel, alcove and keycaps",
+        "Arduino firmware on TFT_eSPI with a key-matrix tester"
+      ],
+      "renders": ["calc_hero", "calc_exploded", "calc_top"],
+      "extra_images": ["_assets/portfolio/custom-calc/pcb_3d.png", "_assets/portfolio/custom-calc/pcb_2d.png", "_assets/portfolio/custom-calc/schematic.png"],
+      "note": "Renders made in Blender from the project's own Calculator.blend; the screen shows the firmware's test graphics."
+    }
+  },
+  "projects": [
+    {
+      "slug": "hollowdeep",
+      "title": "HOLLOWDEEP",
+      "date": "November 2, 2026",
+      "categories": ["featured", "program", "art"],
+      "summary": "A gothic first-person dungeon crawler with its own software 3D renderer written in Lua, an endless procedural dungeon, a grid inventory and a skill tree.",
+      "description": "HOLLOWDEEP is a gothic, medieval first-person dungeon crawler for the SUGAR engine. Everything on screen comes from a software polygon renderer written in Lua: a free-look camera, a per-pixel depth buffer, perspective-correct textures and smooth vertex lighting, with portal visibility so only the cells you can see are drawn. The dungeon is infinite, built from 16 × 16-cell chunks generated from a world seed and stitched together through matching exits, with stairs, pits, ledges and balconies. On top of Quake-style movement sit a Diablo II-style HUD, a Tarkov-style grid inventory, loot chests, a merchant in every 4 × 4 block of chunks, and three skill trees of warfare, marksmanship and sorcery.",
+      "highlights": [
+        "Software 3D rasterizer in Lua: depth buffer, textures, vertex lighting",
+        "Infinite chunked dungeon across five themes",
+        "Eight enemy types with line-of-sight and flow-field pathfinding",
+        "45 item bases, 35 affixes, a rotate-to-fit grid inventory",
+        "Three skill trees: Warfare, Marksman, Sorcery",
+        "49 synthesized sound effects; ~6 ms per busy frame with LuaJIT"
+      ],
+      "stack": ["SUGAR engine", "Lua / LuaJIT", "Python tooling"],
+      "source_dir": "Quake_Like/screenshots",
+      "images": ["03_cathedral.png", "02_lightning.png", "06_bestiary.png", "09_inventory.png", "01_title.png", "04_crypt.png", "05_caverns.png", "07_warhammer.png", "08_kite_shield.png", "10_shop_room.png", "11_shop_ui.png", "12_skills.png", "13_maze.png"],
+      "pixel": true,
+      "status": "Playable build",
+      "session": "Gothic medieval FPS game"
+    },
+    {
+      "slug": "deepwell",
+      "title": "DEEPWELL",
+      "date": "November 1, 2026",
+      "categories": ["featured", "program", "art"],
+      "summary": "A 3D block puzzle down a well, in two editions: a PICO-8 cartridge and DEEPWELL DX for SUGAR, with lit cubes, particles and VIGIL, a wax-and-fire mode.",
+      "description": "DEEPWELL is a 3D block puzzle: pieces built from cubes fall into a 5 × 5 well, 12 layers deep, seen from straight above in perspective. You turn, tip and roll them in three dimensions and fill a whole layer to clear it. The PICO-8 edition is a single 128 × 128 cartridge with wireframe and flat-shaded 3D, two modes, high scores and a Virtual Boy-style red look, running at 60 fps in about 5,100 of PICO-8's 8,192 tokens. DEEPWELL DX for SUGAR redraws it at 480 × 270 with solid lit cubes, parallax, a glass falling piece, particles and a synthesized soundtrack. It also adds VIGIL, where the pieces are candle wax, every fifth piece is a flame, and fire spreads through touching wax of the same color.",
+      "highlights": [
+        "5 × 5 well, 12 layers deep; turn, tip and roll in 3D",
+        "PICO-8 cart: ~5,100 of 8,192 tokens at 60 fps",
+        "Painter's-order 3D with no sorting: deepest layer first",
+        "DX edition: 480 × 270, 103-colour lit palette, parallax",
+        "VIGIL mode: wax chains that burn by colour",
+        "16 synthesized sound effects and two music loops"
+      ],
+      "stack": ["PICO-8 (Lua)", "SUGAR (Lua)", "Python audio tools"],
+      "source_dir": "3D_Tetris/screenshots",
+      "images": ["sugar/endless.gif", "sugar/title.png", "sugar/gameplay.png", "sugar/layer_clear.png", "sugar/vigil.gif", "sugar/vigil_fire.png", "sugar/vigil_red.png", "sugar/high_scores.png", "pico8/title.png", "pico8/gameplay.png", "pico8/layer_clear.png", "pico8/red_mode.png", "pico8/controls.png"],
+      "thumb_from": "sugar/gameplay.png",
+      "pixel": true,
+      "demo": {"src": "3D_Tetris/pico8/web", "html": "deepwell.html", "js": "deepwell.js"},
+      "status": "Playable",
+      "session": "Pico-8 3D chess game"
+    },
+    {
+      "slug": "mp3-player",
+      "title": "Custom MP3 Player",
+      "date": "November 2, 2026",
+      "categories": ["engineer"],
+      "summary": "A pocket-sized, cylindrical MP3 player built around an ESP32-S3, with a long color bar display and three gear-driven ring knobs. In the design phase.",
+      "description": "A hobby build inspired by Sony's NW-E507 'stick' Walkman: a single tube about 40 mm across and 130–160 mm long, with a 2.25-inch, 76 × 284 color IPS bar display behind a semi-translucent shell and three ring knobs the full width of the tube. A gear inside each ring drives a small rotary encoder in the body, and a long spine PCB runs down the center beside the 18650 cell. The parts list is final and a SolidWorks mock assembly of the housing and internals is in progress; the PCBs and firmware come next.",
+      "highlights": [
+        "Adafruit ESP32-S3 Feather with 2 MB PSRAM for MP3 decoding",
+        "2.25\" 76 × 284 IPS bar TFT over SPI",
+        "Three no-detent Bourns PEC11R encoders at ~2.5:1 through the rings",
+        "TLV320DAC3100 I²S DAC and headphone amp",
+        "2200 mAh 18650 cell with a MAX17048 fuel gauge",
+        "Spine board and display board joined by two 10-pin ribbons"
+      ],
+      "stack": ["ESP32-S3", "SolidWorks", "KiCad", "Arduino (planned)"],
+      "renders": ["mp3_concept_hero", "mp3_concept_xray"],
+      "note": "Concept renders generated in Blender from the README's dimensions and parts list, not from the SolidWorks model.",
+      "repo": "https://github.com/ryangriffith121/Custom_MP3_Player",
+      "status": "Design phase"
+    },
+    {
+      "slug": "market-dashboard",
+      "title": "Market Dashboard",
+      "date": "November 1, 2026",
+      "categories": ["program"],
+      "summary": "A live local dashboard of tech stocks and world markets: a dot-matrix world map, a globe, a heatmap and charts in a red HUD look, fed by Yahoo Finance.",
+      "description": "A standalone dashboard that tracks tech stocks and world market indexes. A small Python server pulls prices through the yfinance library and serves a single page: index tiles, a scrolling ticker, a dot-matrix world map and globe, a rotating price-history chart with headlines, a market heatmap and each stock's place in its 52-week range. Index levels refresh every minute, currency rates every five and price history every fifteen. If Yahoo can't be reached, the page falls back to a saved snapshot so it always draws.",
+      "highlights": [
+        "Python server with a vanilla JavaScript front end",
+        "Refresh: prices 60 s, FX 5 min, history 15 min, headlines 10 min",
+        "Offline snapshot fallback",
+        "Tickers, indexes and chart series set in one config.json"
+      ],
+      "stack": ["Python", "yfinance", "JavaScript", "SVG / Canvas"],
+      "captures": ["market_dashboard", "market_chart", "market_heatmap", "market_globe"],
+      "note": "Screenshots taken from the offline snapshot mode.",
+      "status": "Working"
+    },
+    {
+      "slug": "custom-keyboard",
+      "title": "Custom Keyboard PCB",
+      "date": "November 2, 2026",
+      "categories": ["engineer"],
+      "summary": "A custom mechanical keyboard PCB around a Teensy 4.0: a 16 × 6 key matrix read through an MCP23017 I/O expander, a small color display and a rotary encoder.",
+      "description": "A custom mechanical keyboard board built around a Teensy 4.0, with a 16-column by 6-row key matrix (up to 96 keys, one diode per switch), a 1.14-inch ST7789 color display below the keys and a rotary encoder with a push button. The design needs about 30 GPIO but the Teensy's through-hole edge pins only offer 24, so the 16 column lines go to an MCP23017 I²C expander. A full six-row scan still finishes well under a millisecond at 400 kHz. The schematic is drawn; PCB layout and firmware come next.",
+      "highlights": [
+        "Teensy 4.0 with native USB",
+        "16 × 6 matrix, one diode per switch",
+        "MCP23017 reads all 16 columns in one I²C transaction",
+        "1.14\" ST7789 135 × 240 display and an EC11 encoder"
+      ],
+      "stack": ["KiCad", "Teensy 4.0", "MCP23017", "Teensyduino (planned)"],
+      "captures": ["kb_schematic"],
+      "repo": "https://github.com/ryangriffith121/Custom_Keyboard",
+      "status": "Schematic"
+    }
+  ]
+}

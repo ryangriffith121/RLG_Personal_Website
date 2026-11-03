@@ -1,0 +1,12 @@
+{
+  "name": "rlg-prototype-tools",
+  "private": true,
+  "type": "module",
+  "description": "Media capture and layout tests for the RyanLGriffith.com prototypes",
+  "scripts": {
+    "test": "node test_layout.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.56.1"
+  }
+}

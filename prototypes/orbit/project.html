@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project — Ryan L. Griffith</title>
+  <meta name="theme-color" content="#d9d4e2">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/orbit.css">
+</head>
+<body data-page="project">
+<main id="main">
+  <section class="p-head on-grey ruled" aria-labelledby="p-title">
+    <div class="wrap">
+      <p class="crumbs mono"><a href="work.html">Work</a><span aria-hidden="true">/</span><span id="crumb-id"></span></p>
+      <h1 class="p-title" id="p-title"></h1>
+      <dl class="meta4" id="p-meta"></dl>
+    </div>
+  </section>
+
+  <section class="viewer on-night" aria-label="Images">
+    <div class="viewer__stage" id="stage"></div>
+    <div class="viewer__bar">
+      <p class="mono" id="cap" aria-live="polite"></p>
+      <div class="viewer__arrows"><button type="button" id="prev" aria-label="Previous image">←</button><button type="button" id="next" aria-label="Next image">→</button></div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+
+  <section class="p-body on-indigo ruled" aria-label="About this project">
+    <div class="wrap"><div class="cols" id="p-body" style="padding-top:clamp(28px,3vw,44px)"></div></div>
+  </section>
+
+  <nav class="on-grey ruled" aria-label="More projects">
+    <div class="wrap"><div class="pn" id="pn"></div></div>
+  </nav>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/orbit.js"></script>
+</body>
+</html>

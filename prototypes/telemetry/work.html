@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mission Log — Ryan L. Griffith</title>
+  <meta name="description" content="Every project by Ryan L. Griffith since 2023. Filter by discipline, sort and search.">
+  <meta name="theme-color" content="#0a0b0f">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/telemetry.css">
+</head>
+<body data-page="work">
+<main id="main">
+  <header class="page-head">
+    <p class="mono sig" style="display:flex;gap:10px;align-items:center"><i class="led"></i>Mission log · full archive</p>
+    <h1 class="disp" style="margin-top:16px">Missions</h1>
+  </header>
+  <div class="cmd" role="search">
+    <i class="corners corners--dim" data-decor aria-hidden="true"></i>
+    <div class="cmd__row"><span class="mono">&gt; filter</span><div class="cmd__row" id="chips" role="group" aria-label="Filter by discipline"></div></div>
+    <div class="cmd__row">
+      <span class="mono">&gt; query</span>
+      <label class="field"><span class="sr-only">Search projects</span><input id="q" type="search" placeholder="type to search" autocomplete="off"></label>
+      <label class="field field--sel"><span class="sr-only">Sort projects</span><select id="sort"><option value="recent">Newest</option><option value="oldest">Oldest</option><option value="az">A – Z</option><option value="za">Z – A</option></select></label>
+      <span class="cmd__row" role="group" aria-label="View"><button class="chip" type="button" data-view="log" aria-pressed="true">Log</button><button class="chip" type="button" data-view="grid" aria-pressed="false">Grid</button></span>
+    </div>
+  </div>
+  <p class="result-line mono" id="result" aria-live="polite"></p>
+  <div class="results" id="results"></div>
+
+  <section class="sec" aria-labelledby="cert-title">
+    <div class="sec__head"><div><p class="sec__kicker mono"><i class="led"></i>Clearances</p><h2 class="h-sec" id="cert-title">Certifications.</h2></div></div>
+    <div class="certs" id="certs"></div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/telemetry.js"></script>
+</body>
+</html>

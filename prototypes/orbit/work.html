@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Work — Ryan L. Griffith</title>
+  <meta name="description" content="Every project by Ryan L. Griffith since 2023: games, PCBs, CAD builds and art. Filter by discipline, sort and search.">
+  <meta name="theme-color" content="#412db5">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/orbit.css">
+</head>
+<body data-page="work">
+<main id="main">
+  <section class="on-indigo ruled" aria-labelledby="work-title">
+    <div class="wrap">
+      <h1 class="giant" id="work-title">Work</h1>
+      <div class="shead">
+        <p class="lede" style="max-width:34ch">Games, circuit boards, competition builds and art. <span id="count">32</span> projects, newest first, from January 2023 on.</p>
+        <p class="label label--lime">Database · 2023–2026</p>
+      </div>
+      <div class="controls">
+        <div class="chips" id="chips" role="group" aria-label="Filter by discipline"></div>
+        <div class="tools">
+          <label class="field"><span class="sr-only">Search projects</span><input id="q" type="search" placeholder="Search" autocomplete="off"></label>
+          <label class="field field--select"><span class="sr-only">Sort projects</span>
+            <select id="sort"><option value="recent">Newest</option><option value="oldest">Oldest</option><option value="az">A – Z</option><option value="za">Z – A</option></select>
+          </label>
+          <div class="view-toggle" role="group" aria-label="View"><button type="button" data-view="grid" aria-pressed="true">Grid</button><button type="button" data-view="list" aria-pressed="false">List</button></div>
+        </div>
+      </div>
+      <p class="result-line mono" id="result" aria-live="polite"></p>
+      <div id="results"></div>
+    </div>
+  </section>
+
+  <section class="on-grey ruled" aria-labelledby="certs-title">
+    <div class="wrap">
+      <div class="shead"><h2 class="h2" id="certs-title">Certifications.</h2><p class="label label--pink">Earned 2022–2025</p></div>
+      <div class="cards certs" id="certs"></div>
+    </div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/orbit.js"></script>
+</body>
+</html>

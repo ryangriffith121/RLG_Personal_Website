@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ryan L. Griffith — Programmer, Engineer, Artist</title>
+  <meta name="description" content="Ryan L. Griffith builds games, circuit boards and art in Boulder, Colorado. 32 projects since 2023.">
+  <meta name="theme-color" content="#e9ff97">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/spectrum.css">
+</head>
+<body data-page="home">
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__top t-grey">
+      <h1 class="mono" id="hero-title">Ryan L. Griffith — Portfolio 2023–2026</h1>
+      <p class="mono">Boulder, Colorado · <span data-count-key="projects">32</span> projects</p>
+    </div>
+    <a class="band t-indigo" href="work.html?cat=program" aria-label="Programmer: see the programming projects">
+      <span class="band__meta mono"><span>01 / Programming</span><span><span data-count-key="program">20</span> projects <span class="arr" aria-hidden="true">→</span></span></span>
+      <span class="fit band__word" data-fit data-fit-h="0.74">Programmer</span>
+    </a>
+    <a class="band t-lime" href="work.html?cat=engineer" aria-label="Engineer: see the engineering projects">
+      <span class="band__meta mono"><span>02 / Engineering</span><span><span data-count-key="engineer">10</span> projects <span class="arr" aria-hidden="true">→</span></span></span>
+      <span class="fit band__word" data-fit data-fit-h="0.74">Engineer</span>
+    </a>
+    <a class="band t-pink" href="work.html?cat=art" aria-label="Artist: see the art projects">
+      <span class="band__meta mono"><span>03 / Art</span><span><span data-count-key="art">13</span> projects <span class="arr" aria-hidden="true">→</span></span></span>
+      <span class="fit band__word" data-fit data-fit-h="0.74">Artist</span>
+    </a>
+  </section>
+
+  <section class="lede t-grey" aria-label="Introduction">
+    <p data-reveal>I'm Ryan: a <em class="e-prg">programmer</em> <span class="pill" data-pill="prg" aria-hidden="true"></span>, <em class="e-eng">engineer</em> <span class="pill" data-pill="eng" aria-hidden="true"></span> and <em class="e-art">artist</em> <span class="pill" data-pill="art" aria-hidden="true"></span> who builds games, circuit boards and art in Boulder, Colorado.</p>
+    <div class="lede__foot" data-reveal>
+      <a class="btn btn--ink" href="work.html">See all the work <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn" href="about.html">About me</a>
+    </div>
+  </section>
+
+  <div class="marquee t-lime" aria-hidden="true"><div class="marquee__run">
+    <span>Programmer</span><span>✶</span><span>Engineer</span><span>✶</span><span>Artist</span><span>✶</span><span>CERN BL4S 2026</span><span>✶</span><span>CS @ CU Boulder</span><span>✶</span>
+    <span>Programmer</span><span>✶</span><span>Engineer</span><span>✶</span><span>Artist</span><span>✶</span><span>CERN BL4S 2026</span><span>✶</span><span>CS @ CU Boulder</span><span>✶</span>
+  </div></div>
+
+  <section class="deck t-grey" aria-labelledby="deck-title">
+    <div class="deck__head"><h2 class="h2" id="deck-title">Featured.</h2><p class="mono">Six builds, stacked · scroll</p></div>
+    <div id="deck" data-stack></div>
+  </section>
+
+  <section class="nums" aria-label="By the numbers">
+    <div class="num t-indigo"><b><span data-count-key="projects">32</span></b><p>projects since January 2023: games, circuit boards, CAD and art.</p></div>
+    <div class="num t-pink"><b>1 of 5</b><p>winning teams worldwide in CERN's Beamline for Schools 2026, from 712 proposals.</p></div>
+    <div class="num t-lime"><b>16</b><p>SiPM channels on the detector board Ryan designed in KiCad.</p></div>
+    <div class="num t-deep"><b><span data-count-key="demos">5</span></b><p>PICO-8 games you can play in the browser, right here.</p></div>
+    <div class="num t-paper"><b><span data-count-key="certs">4</span></b><p>certifications: Python, Photoshop, SolidWorks and Inventor.</p></div>
+    <div class="num t-ink"><b>3</b><p>disciplines in one portfolio, and most projects use two of them.</p></div>
+  </section>
+
+  <section class="t-grey" aria-labelledby="latest-title">
+    <div class="shead"><h2 class="h2" id="latest-title">Latest.</h2><a class="btn" href="work.html">Full index <span class="arr" aria-hidden="true">→</span></a></div>
+    <div class="wrap" style="padding-bottom:clamp(56px,7vw,110px)"><div class="mosaic" id="latest"></div></div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="js/spectrum.js"></script>
+</body>
+</html>

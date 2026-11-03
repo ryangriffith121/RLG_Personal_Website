@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project — Ryan L. Griffith</title>
+  <meta name="theme-color" content="#d9d4e2">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/spectrum.css">
+</head>
+<body data-page="project">
+<main id="main">
+  <header class="phead" id="phead">
+    <div class="phead__crumbs mono"><a href="work.html">← Index</a><span id="crumb-id"></span></div>
+    <h1 class="p-title" id="p-title"></h1>
+    <p class="p-sum" id="p-sum"></p>
+    <div class="meta" id="p-meta"></div>
+  </header>
+  <section class="gallery t-grey" aria-label="Images">
+    <div class="stage" id="stage"></div>
+    <div class="stage__bar">
+      <span class="counter" id="counter" aria-hidden="true"></span>
+      <p class="mono" id="cap" aria-live="polite" style="flex:1;min-width:200px"></p>
+      <div class="arrows"><button type="button" id="prev" aria-label="Previous image">←</button><button type="button" id="next" aria-label="Next image">→</button></div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+  <section class="story t-grey" id="story" aria-label="About this project"></section>
+  <nav class="pn" id="pn" aria-label="More projects"></nav>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="js/spectrum.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demos — Ryan L. Griffith</title>
+  <meta name="description" content="Play Ryan L. Griffith's PICO-8 games in the browser: DEEPWELL, The Kingdom, Density, Great Gatsby Game and Rotation Simulator.">
+  <meta name="theme-color" content="#0f0e19">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/orbit.css">
+</head>
+<body data-page="demos">
+<main id="main">
+  <section class="on-night ruled" aria-labelledby="demos-title">
+    <div class="wrap">
+      <h1 class="giant" id="demos-title" style="color:var(--indigo-300)">Demos</h1>
+      <div class="shead">
+        <p class="lede" style="max-width:36ch">Five PICO-8 cartridges, playable right here. Arrow keys move; Z and X are the two buttons.</p>
+        <p class="label label--lime">Click a cartridge to load it</p>
+      </div>
+      <div class="cols" style="padding-bottom:clamp(40px,5vw,80px)">
+        <div class="cell"><ul class="demo-list" id="demo-list" aria-label="Cartridges"></ul></div>
+        <div class="cell span-2">
+          <div class="window">
+            <div class="window__bar"><span class="mono" id="win-title"></span>
+              <div class="window__btns"><button type="button" id="win-full">Fullscreen</button><a id="win-open" href="#" target="_blank" rel="noopener">New tab ↗</a></div>
+            </div>
+            <div class="screen" id="screen"></div>
+          </div>
+          <div class="demo-info"><p id="demo-blurb"></p><a class="btn btn--line" id="demo-link" href="#">Project page <span class="arr" aria-hidden="true">→</span></a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/orbit.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Ryan L. Griffith</title>
+  <meta name="description" content="Ryan L. Griffith: programmer, engineer and artist, CS student at CU Boulder.">
+  <meta name="theme-color" content="#412db5">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/orbit.css">
+</head>
+<body data-page="about">
+<main id="main">
+  <section class="on-indigo ruled" aria-labelledby="about-title">
+    <div class="wrap">
+      <h1 class="giant" id="about-title">About</h1>
+      <div class="cols" style="margin-top:clamp(24px,3vw,48px)">
+        <div class="cell span-2">
+          <p class="label label--lime">Who is Ryan L. Griffith?</p>
+          <p class="about-lede" id="bio-lede" style="margin-top:22px"></p>
+        </div>
+        <div class="cell"><div class="portrait" id="portrait"></div><p class="mono" style="margin-top:12px;color:var(--indigo-100)">Above Boulder, Colorado. Hover for colour.</p></div>
+      </div>
+      <div class="cols" style="padding-bottom:clamp(40px,5vw,80px)">
+        <div class="cell span-2 prose lede" id="bio-rest" style="font-size:clamp(17px,1.3vw,20px);color:var(--indigo-100)"></div>
+        <div class="cell">
+          <p class="label label--lime">Now</p>
+          <p style="margin-top:14px">Computer Science at CU Boulder. Building an ESP32 calculator, a cylindrical MP3 player and a Teensy keyboard.</p>
+          <div class="p-actions"><a class="btn btn--lime" href="work.html">See the work <span class="arr" aria-hidden="true">→</span></a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="values on-indigo ruled" aria-labelledby="cred-title" style="background-color:var(--indigo-600)">
+    <div class="wrap">
+      <div class="cols"><div class="cell values__head span-2"><h2 class="h2" id="cred-title">Credentials.</h2></div></div>
+      <div class="cols" id="certs"></div>
+    </div>
+  </section>
+
+  <section class="on-grey ruled" aria-labelledby="tools-title">
+    <div class="wrap">
+      <div class="shead"><h2 class="h2" id="tools-title">Toolbox.</h2><p class="label label--pink">Used across 32 projects</p></div>
+      <div class="cols toolbox" style="padding-bottom:clamp(40px,5vw,80px)">
+        <div class="cell"><p class="label">Code</p><ul style="margin-top:16px">
+          <li><span>Python</span><span>Pygame · ML · MicroPython</span></li><li><span>C++</span><span>SFML · OpenCV</span></li>
+          <li><span>Lua</span><span>PICO-8 · Playdate · SUGAR</span></li><li><span>JavaScript</span><span>Web APIs · Canvas</span></li>
+          <li><span>PHP + SQL</span><span>SQLite</span></li></ul></div>
+        <div class="cell"><p class="label">Hardware</p><ul style="margin-top:16px">
+          <li><span>KiCad</span><span>Schematics · PCBs</span></li><li><span>ESP32 · Teensy</span><span>Arduino · I²C · SPI</span></li>
+          <li><span>Raspberry Pi</span><span>Linux scripts</span></li><li><span>SiPMs</span><span>Cherenkov detector</span></li>
+          <li><span>CNC · 3D printing</span><span>G-code · tolerances</span></li></ul></div>
+        <div class="cell"><p class="label">Design</p><ul style="margin-top:16px">
+          <li><span>SolidWorks</span><span>CSWA certified</span></li><li><span>Autodesk Inventor</span><span>Certified user</span></li>
+          <li><span>Blender</span><span>Modeling · procedural</span></li><li><span>Photoshop</span><span>Adobe certified</span></li>
+          <li><span>Illustrator · Affinity</span><span>Vector</span></li></ul></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/orbit.js"></script>
+</body>
+</html>

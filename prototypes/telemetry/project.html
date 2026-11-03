@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mission — Ryan L. Griffith</title>
+  <meta name="theme-color" content="#0a0b0f">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/telemetry.css">
+</head>
+<body data-page="project">
+<main id="main">
+  <header class="dossier-head">
+    <p class="crumbs mono"><a href="work.html">Mission log</a><span aria-hidden="true">/</span><span id="crumb-id" class="sig"></span><span aria-hidden="true">/</span><span id="p-status"></span></p>
+    <h1 class="p-title" id="p-title"></h1>
+  </header>
+  <div class="dossier">
+    <section aria-label="Images">
+      <div class="viewer">
+        <i class="corners" data-decor aria-hidden="true"></i>
+        <div class="viewer__hud mono" aria-hidden="true"><span id="hud-l"></span><span id="hud-r"></span></div>
+        <div class="viewer__stage" id="stage"></div>
+      </div>
+      <div class="viewer__bar"><p class="mono dim" id="cap" aria-live="polite"></p>
+        <div class="arrows"><button type="button" id="prev" aria-label="Previous image">←</button><button type="button" id="next" aria-label="Next image">→</button></div></div>
+      <div class="thumbs" id="thumbs"></div>
+    </section>
+    <aside class="telem" id="telem" aria-label="Project details"></aside>
+  </div>
+  <section class="brief" id="brief" aria-label="About this project"></section>
+  <nav class="pn" id="pn" aria-label="More projects"></nav>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/telemetry.js"></script>
+</body>
+</html>

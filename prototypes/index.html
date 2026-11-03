@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RyanLGriffith.com — Redesign Prototypes</title>
+  <meta name="description" content="Three redesign directions for RyanLGriffith.com, inspired by albedo.com: Orbit, Telemetry and Spectrum.">
+  <meta name="theme-color" content="#0f0e19">
+  <link rel="icon" href="../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&family=Unbounded:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --indigo: #412db5; --deep: #2d2178; --lime: #e9ff97; --grey: #d9d4e2; --pink: #e5197f; --night: #0f0e19; --void: #0a0b0f;
+      --gut: clamp(16px, 2.4vw, 36px); --mono: "Geist Mono", Consolas, monospace; --sans: "Instrument Sans", Arial, sans-serif; color-scheme: dark; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--night); color: var(--grey); font: 400 17px/1.45 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, p, ul { margin: 0; }
+    ul { padding: 0; list-style: none; }
+    img { display: block; max-width: 100%; height: auto; }
+    :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+    .mono { font: 400 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 24px; align-items: end; padding: clamp(36px, 5vw, 72px) var(--gut) clamp(28px, 3vw, 44px); }
+    header h1 { font-size: clamp(34px, 5.4vw, 84px); line-height: .98; letter-spacing: -.03em; font-weight: 400; max-width: 16ch; }
+    header h1 em { font-style: normal; color: var(--lime); }
+    header .side { display: grid; gap: 10px; justify-items: end; text-align: right; color: #aba2d4; }
+    header .side a { color: var(--grey); border-bottom: 1px solid currentColor; }
+    header .side a:hover { color: var(--lime); }
+    @media (max-width: 1000px) { header { grid-template-columns: minmax(0, 1fr); } header .side { justify-items: start; text-align: left; } }
+    .protos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @media (max-width: 1000px) { .protos { grid-template-columns: minmax(0, 1fr); } }
+    .proto { container-type: inline-size; position: relative; display: flex; flex-direction: column; gap: 22px; padding: clamp(22px, 2.6vw, 40px) var(--gut) clamp(28px, 3vw, 48px); min-width: 0; }
+    .proto--orbit { background: var(--indigo); color: var(--grey); }
+    .proto--telemetry { background: var(--void); color: #e7e5ef; border-inline: 1px solid rgba(231, 229, 239, .1); }
+    .proto--spectrum { background: var(--lime); color: var(--deep); }
+    .proto__top { display: flex; justify-content: space-between; gap: 12px; }
+    .proto h2 { line-height: .9; letter-spacing: -.02em; overflow-wrap: normal; }
+    .proto--orbit h2 { font: 400 min(22cqi, 96px)/.9 var(--sans); letter-spacing: -.045em; }
+    .proto--telemetry h2 { font: 700 min(10.5cqi, 58px)/.95 "Unbounded", sans-serif; text-transform: uppercase; color: var(--lime); }
+    .proto--spectrum h2 { font: 850 min(12cqi, 84px)/.88 "Anybody", sans-serif; font-stretch: 125%; text-transform: uppercase; }
+    .proto p.pitch { font-size: clamp(17px, 1.3vw, 20px); max-width: 34ch; }
+    .shot { position: relative; display: block; overflow: hidden; border-radius: 4px; box-shadow: 0 18px 40px rgba(0, 0, 0, .3); }
+    .shot img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; transition: transform .7s cubic-bezier(.2, .7, .1, 1); }
+    .shot .phone { position: absolute; right: 12px; bottom: 12px; width: 23%; aspect-ratio: 390 / 844; border-radius: 12px; overflow: hidden; border: 3px solid var(--night); box-shadow: 0 10px 24px rgba(0, 0, 0, .45); }
+    .shot .phone img { aspect-ratio: auto; height: 100%; }
+    .shot:hover > img { transform: scale(1.03); }
+    .feats li { display: flex; gap: 12px; align-items: baseline; padding: 10px 0; border-top: 1px solid currentColor; border-color: rgba(127, 127, 160, .35); }
+    .feats li::before { content: ""; width: 6px; height: 6px; flex: none; background: var(--pink); transform: translateY(-2px); }
+    .proto--telemetry .feats li::before { background: var(--lime); }
+    .proto--spectrum .feats li::before { background: var(--indigo); }
+    .enter { display: inline-flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 52px; padding: 0 22px; margin-top: auto; font: 500 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; transition: background .2s, color .2s; }
+    .proto--orbit .enter { background: var(--lime); color: var(--indigo); }
+    .proto--telemetry .enter { background: var(--lime); color: var(--void); }
+    .proto--spectrum .enter { background: var(--deep); color: var(--lime); border-radius: 999px; }
+    .enter:hover { filter: brightness(1.08); }
+    .enter span { transition: transform .25s; }
+    .enter:hover span { transform: translateX(4px); }
+    .pages { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+    .pages a { border-bottom: 1px solid currentColor; }
+    .pages a:hover { opacity: .75; }
+    footer { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; padding: 22px var(--gut) 28px; color: #8f87c0; }
+    footer a { color: var(--grey); border-bottom: 1px solid currentColor; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Three directions for <em>RyanLGriffith.com</em></h1>
+  <div class="side mono">
+    <span>Redesign prototypes · November 2026</span>
+    <span>Inspired by albedo.com: bold colour, giant type, technical detail</span>
+    <a href="../index.html">Current site (PHP version)</a>
+  </div>
+</header>
+<main class="protos">
+  <section class="proto proto--orbit" aria-labelledby="p1">
+    <div class="proto__top mono"><span>Prototype 01</span><span>Indigo · Chartreuse · Space grey</span></div>
+    <h2 id="p1">Orbit</h2>
+    <p class="pitch">The closest to Albedo: a ruled three-column grid, a pill nav with a live status capsule, and a giant custom wordmark.</p>
+    <a class="shot" href="orbit/index.html" aria-label="Open Orbit">
+      <img src="_shared/media/previews/orbit-desk.webp" alt="Orbit home page: dot globe hero with stat blocks" width="1200" height="750">
+      <span class="phone"><img src="_shared/media/previews/orbit-phone.webp" alt="" width="390" height="844"></span>
+    </a>
+    <ul class="feats mono">
+      <li>Draggable dot globe with project orbits</li>
+      <li>Boulder → DESY route and BL4S stats</li>
+      <li>Albedo-style "values" grid that lights up</li>
+      <li>Custom-drawn GRIFFITH wordmark in SVG</li>
+    </ul>
+    <p class="pages mono"><a href="orbit/work.html">Work</a><a href="orbit/project.html?id=bl4s-2026">Project</a><a href="orbit/about.html">About</a><a href="orbit/demos.html">Demos</a></p>
+    <a class="enter" href="orbit/index.html">Enter Orbit <span aria-hidden="true">→</span></a>
+  </section>
+  <section class="proto proto--telemetry" aria-labelledby="p2">
+    <div class="proto__top mono"><span>Prototype 02</span><span>Void · Signal lime · Razzmatazz</span></div>
+    <h2 id="p2">Telemetry</h2>
+    <p class="pitch">Mission control. A live Cherenkov-ring detector simulation, a HUD frame, a command palette and a mission log.</p>
+    <a class="shot" href="telemetry/index.html" aria-label="Open Telemetry">
+      <img src="_shared/media/previews/telemetry-desk.webp" alt="Telemetry home page: detector grid hero" width="1200" height="750">
+      <span class="phone"><img src="_shared/media/previews/telemetry-phone.webp" alt="" width="390" height="844"></span>
+    </a>
+    <ul class="feats mono">
+      <li>Pointer-steered detector, modelled on BL4S</li>
+      <li>Press / to search everything</li>
+      <li>Mission log with hover previews</li>
+      <li>Boot sequence and live Boulder clock</li>
+    </ul>
+    <p class="pages mono"><a href="telemetry/work.html">Work</a><a href="telemetry/project.html?id=hollowdeep">Project</a><a href="telemetry/about.html">About</a><a href="telemetry/demos.html">Demos</a></p>
+    <a class="enter" href="telemetry/index.html">Enter Telemetry <span aria-hidden="true">→</span></a>
+  </section>
+  <section class="proto proto--spectrum" aria-labelledby="p3">
+    <div class="proto__top mono"><span>Prototype 03</span><span>Colour per discipline</span></div>
+    <h2 id="p3">Spectrum</h2>
+    <p class="pitch">A colour-block poster. Programming is indigo, engineering chartreuse and art pink, with type stretched to fill every block.</p>
+    <a class="shot" href="spectrum/index.html" aria-label="Open Spectrum">
+      <img src="_shared/media/previews/spectrum-desk.webp" alt="Spectrum home page: three stretched colour bands" width="1200" height="750">
+      <span class="phone"><img src="_shared/media/previews/spectrum-phone.webp" alt="" width="390" height="844"></span>
+    </a>
+    <ul class="feats mono">
+      <li>Variable-width type fitted to each band</li>
+      <li>Letters swell as the pointer gets close</li>
+      <li>Sticky stacked deck of featured builds</li>
+      <li>Duotone mosaic index, colour by discipline</li>
+    </ul>
+    <p class="pages mono"><a href="spectrum/work.html">Work</a><a href="spectrum/project.html?id=custom-calc">Project</a><a href="spectrum/about.html">About</a><a href="spectrum/demos.html">Demos</a></p>
+    <a class="enter" href="spectrum/index.html">Enter Spectrum <span aria-hidden="true">→</span></a>
+  </section>
+</main>
+<footer class="mono">
+  <span>All three read the same data: 27 projects from _data/portfolio.db + 5 new ones</span>
+  <span>See prototypes/README.md</span>
+</footer>
+</body>
+</html>

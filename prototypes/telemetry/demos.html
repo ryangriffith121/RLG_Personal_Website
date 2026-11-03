@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" data-root="../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulator Bay — Ryan L. Griffith</title>
+  <meta name="description" content="Play Ryan L. Griffith's PICO-8 games in the browser.">
+  <meta name="theme-color" content="#0a0b0f">
+  <link rel="icon" href="../../_assets/icons/logov2_websmall.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/telemetry.css">
+</head>
+<body data-page="demos">
+<main id="main">
+  <header class="page-head">
+    <p class="mono sig" style="display:flex;gap:10px;align-items:center"><i class="led"></i>Simulator bay · 5 cartridges</p>
+    <h1 class="disp" style="margin-top:16px">Demos</h1>
+  </header>
+  <div class="bay">
+    <ul class="carts" id="carts" aria-label="Cartridges"></ul>
+    <section aria-label="Player">
+      <div class="crt">
+        <div class="crt__bar"><span class="mono sig" id="crt-title"></span>
+          <div class="crt__btns"><button type="button" id="crt-full">Fullscreen</button><a id="crt-open" href="#" target="_blank" rel="noopener">New tab ↗</a></div></div>
+        <div class="screen" id="screen"></div>
+        <i class="crt__scan" aria-hidden="true" data-decor></i>
+      </div>
+      <div class="bay__info"><p id="bay-blurb"></p><a class="btn" id="bay-link" href="#">Mission dossier <span aria-hidden="true">→</span></a></div>
+      <p class="mono dim" style="margin-top:14px">Controls: arrow keys to move · Z and X are the two buttons · Enter opens the PICO-8 menu.</p>
+    </section>
+  </div>
+</main>
+<script src="../_shared/data/site-data.js"></script>
+<script src="../_shared/js/core.js"></script>
+<script src="../_shared/js/wordmark.js"></script>
+<script src="js/telemetry.js"></script>
+</body>
+</html>
