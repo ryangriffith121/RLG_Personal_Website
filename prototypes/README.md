@@ -1,5 +1,9 @@
 # RyanLGriffith.com redesign prototypes
 
+> **The finished site is in [`final/`](../final/README.md).** It is built on Spectrum, with Orbit's
+> globe and glass header and Telemetry's search, feed and data, and it runs on PHP and SQLite. The
+> prototypes below are kept for reference.
+
 Three complete redesigns of the site, inspired by [albedo.com](https://albedo.com): bold indigo, chartreuse and pink, giant type, technical labels and data used as design. They run side by side with the current PHP site and change none of its files.
 
 | | Prototype | Direction |
