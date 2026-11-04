@@ -52,13 +52,13 @@ On nginx or another server without `.htaccess`, add rules that deny `/data/` and
 | `index.php` | Home: role bands, intro, marquee, featured deck, globe, numbers, latest mosaic, koi pond |
 | `portfolio.php` | Work index: filter, search, sort, list view, the block timeline |
 | `project.php?id=<slug>` | One project: header cut-out, data strip, gallery and lightbox, write-up, older/newer |
-| `about.php` | About: hello and portrait, toolbox (with how many projects use each tool), bio, desk, certificates |
+| `about.php` | About: hello and portrait, toolbox (with how many projects use each tool), bio, certificates |
 | `demos.php` | Arcade: the five PICO-8 games, played in the page (`demos.php#<slug>` opens one) |
 | `404.php`, `sitemap.php`, `robots.txt`, `site.webmanifest`, `favicon.*` | Error page and search-engine files |
 | `inc/site.php` | Settings, the database, and helpers. Also the footer line `CTA_LINE`. |
 | `inc/layout.php` | Page head (all metadata), nav, footer, feed, search palette and shared pieces |
 | `assets/css/site.css` | All styles |
-| `assets/js/site.js` | Menu, search palette (`/` or Ctrl+K), filters, gallery, lightbox, arcade, desk |
+| `assets/js/site.js` | Menu, search palette (`/` or Ctrl+K), filters, gallery, lightbox, arcade, certificates |
 | `assets/js/globe.js`, `assets/js/pond.js` | The globe and the koi pond (Canvas 2D) |
 | `assets/fonts/` | Anybody, Instrument Sans and DM Mono, self-hosted (SIL Open Font License) |
 | `assets/img/` | The logo mark and the horizontal RYAN word mark, as SVG |
@@ -88,7 +88,7 @@ interaction on top.
 | --- | --- |
 | `PortfolioTabs` | One row per project: `id, slug, title, date, unixdate, description, thumbnail, categories` (same as before) |
 | `PortfolioPage` | One row per project: `id, slug, title, date, description, whatilearned, takeaway, images` (same as before) |
-| `ProjectMeta` | Optional extras per slug: `iso` date, `featured`, `is_new`, `summary`, `stack` (JSON list), `highlights` (JSON list), `status`, `repo`, `demo`, `note`, thumbnail size and tone, `pixel` (crisp scaling), the transparent `cutout`, the `og` share card |
+| `ProjectMeta` | Optional extras per slug: `iso` date, `featured`, `is_new`, `summary`, `stack` (JSON list), `highlights` (JSON list), `status`, `repo`, `demo`, `note`, thumbnail size and tone, `pixel` (crisp scaling), the `cutout` (a transparent asset; with `cutout_kind` `photo` it is the artwork itself, shown colourised like the photos), the `og` share card |
 | `ProjectImages` | Gallery images per slug: `position, path, width, height, animated, caption` |
 | `Demos` | The arcade cartridges: `slug, position, title, path, blurb, poster, iso` |
 | `Certifications` | `position, title, short, issuer, iso, image, width, height` |
@@ -138,7 +138,7 @@ The test starts its own `php -S` and checks the following in headless Chrome:
 
 - every page at phone, tablet, laptop and wide sizes, for overlapping or cut-off text, sideways
   scrolling, broken images, console errors and PHP warnings;
-- the filters, search, gallery, lightbox, arcade, desk, menu, globe and pond;
+- the filters, search, gallery, lightbox, certificates, arcade, menu, globe and pond;
 - the metadata, sitemap and robots.txt;
 - the pages with scripts turned off;
 - a project added the old way.

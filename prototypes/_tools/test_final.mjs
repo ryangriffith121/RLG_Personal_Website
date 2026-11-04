@@ -6,7 +6,7 @@
 //    (overlapping or covered text, text off-screen or clipped, sideways scrolling, broken images),
 //    plus console errors, failed requests and PHP warnings.
 // 2. Behaviour: work index filters, search, sort and URL state; the search palette; the gallery and
-//    lightbox; certificates; the desk; the arcade; the phone menu; the globe and the koi pond.
+//    lightbox; certificates; the arcade; the phone menu; the globe and the koi pond.
 // 3. Search engines: one h1, title, description, canonical, robots, Open Graph and Twitter cards with
 //    reachable images, JSON-LD, the sitemap (every URL answers 200), robots.txt, the manifest, 404s.
 // 4. Scripts off: every page still shows its content, and ?cat= / ?q= filter on the server.
@@ -308,7 +308,7 @@ try {
   }
 } catch (e) { fail('project gallery', 'crashed: ' + e.message.split('\n')[0]); }
 
-// ---- about: certificates and the desk
+// ---- about: certificates
 try {
   const w = 'about';
   const { page } = await openPage(ctx, 'about.php');
@@ -316,20 +316,6 @@ try {
   const lb = await page.evaluate(() => { const l = document.querySelector('#lightbox'); return { open: !l.hidden, cap: l.querySelector('.lb__cap').textContent, img: l.querySelector('.lb__img').getAttribute('src') }; });
   check(lb.open && lb.cap.length > 10 && /media\/certs\//.test(lb.img), w, 'certificates open in the lightbox', JSON.stringify(lb));
   await page.keyboard.press('Escape');
-  const flair = await page.$('#desk a.flair');
-  const href = await flair.getAttribute('href');
-  await flair.scrollIntoViewIfNeeded();
-  const box = await flair.boundingBox();
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.mouse.down();
-  for (let k = 1; k <= 8; k++) await page.mouse.move(box.x + box.width / 2 + k * 10, box.y + box.height / 2 + k * 4);
-  await page.mouse.up();
-  await page.waitForTimeout(200);
-  const moved = await page.evaluate(() => ({ x: document.querySelector('#desk a.flair').style.getPropertyValue('--x'), url: location.pathname }));
-  check(parseFloat(moved.x) > 40 && moved.url.endsWith('about.php'), w, 'dragging a cut-out moves it without opening it', JSON.stringify(moved));
-  const box2 = await flair.boundingBox();
-  await Promise.all([page.waitForURL(new RegExp(href.replace(/[?]/g, '\\?'))), page.mouse.click(box2.x + box2.width / 2, box2.y + box2.height / 2)]);
-  pass(w, `a plain click on a cut-out opens ${href}`);
   await page.close();
 } catch (e) { fail('about', 'crashed: ' + e.message.split('\n')[0]); }
 

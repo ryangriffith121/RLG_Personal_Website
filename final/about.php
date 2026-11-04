@@ -24,10 +24,6 @@ $tools = [
     ['Design', 't-pink', [['SolidWorks', 'CSWA', ['solidworks']], ['Blender', 'Modelling', ['blender']], ['Photoshop', 'Certified', ['photoshop']],
         ['Illustrator', 'Vector', ['illustrator']], ['Pixel art', 'Aseprite', ['pixel']]]],
 ];
-// cut-outs on the desk link to their projects; the pixel sprites are just for fun
-$desk = [['custom-calc', 'Custom Calculator'], ['skull-2026', 'Skull 2026'], ['bl4s-2026', 'BL4S SiPM board'], ['mp3-player', 'MP3 player concept'],
-    ['ryan-logo', 'The RY/AN logo'], ['jpl-2025', 'JPL 2025 parts'], ['wheels', 'Wheels watch face'], ['micro', 'Micro'], ['disk-launcher', 'Disk launcher']];
-$sprites = [['toucan.gif', 'Toucan'], ['cherries.gif', 'Cherries'], ['ship-firing.webp', 'Ship, firing'], ['jett.webp', 'Jett'], ['anchor.webp', 'Anchor'], ['freemovie.gif', 'Install FreeMovie.exe?']];
 page_head([
     'title' => 'About Ryan L. Griffith — CS at CU Boulder, CERN BL4S 2026 winner',
     'description' => 'Ryan L. Griffith is a programmer, engineer and artist studying computer science at CU Boulder, and part of Team Centauri Stars, a CERN Beamline for Schools 2026 winner.',
@@ -65,18 +61,6 @@ page_head([
   <section class="bio t-grey" aria-label="Biography">
     <p class="bio__lede"><?= e($pr['about'][0]) ?></p>
     <div class="prose"><?php foreach (array_slice($pr['about'], 1) as $t): ?><p><?= e($t) ?></p><?php endforeach; ?></div>
-  </section>
-
-  <section class="desk t-ink" aria-labelledby="desk-title">
-    <div class="shead"><h2 class="h2" id="desk-title">Desk.</h2><p>Bits of the projects, cut out and left on the desk. Drag them around; click one to open its project.</p></div>
-    <div class="desk__area" id="desk">
-      <?php foreach ($desk as $i => [$slug, $label]): $p = project($slug); if (!$p || !$p['cut']) { continue; } ?>
-      <a class="flair" href="project.php?id=<?= e($slug) ?>" style="--r:<?= (($i * 53) % 13) - 6 ?>deg" draggable="false"><?= img($p['cut'], $label) ?></a>
-      <?php endforeach; ?>
-      <?php foreach ($sprites as $i => [$file, $label]): ?>
-      <span class="flair flair--sprite" style="--r:<?= (($i * 31) % 11) - 5 ?>deg" aria-hidden="true"><img src="media/flair/<?= e($file) ?>" alt="" width="64" height="64" loading="lazy" draggable="false"></span>
-      <?php endforeach; ?>
-    </div>
   </section>
 
   <section class="t-grey" aria-labelledby="cred-title">

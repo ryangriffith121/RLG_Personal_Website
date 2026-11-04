@@ -5,7 +5,8 @@ Run after render_final.py (Blender), final_logos.mjs and final_fonts.py:
 
 final/media/cut/<slug>.webp   a transparent asset per project: studio renders for hardware, the
                               screenshot in a window for software and games, a die-cut sticker
-                              for art, a round face for the watch face
+                              for art, a round face for the watch face. A "photo" is the artwork
+                              itself, square and opaque; the site shows it colourised like a photo.
 final/media/og/<slug>.jpg     1200 x 630 share cards, in the project's discipline colour
 final/media/og/site.jpg       the site's share card
 final/favicon.ico, icon-*.png
@@ -33,7 +34,7 @@ KIND = {
     "bl4s-2026": ("render", RENDERS / "bl4s_board.png"),
     "disk-launcher": ("render", RENDERS / "launcher.png"),
     "jpl-2025": ("render", RENDERS / "jpl_parts.png"),
-    "skull-2026": ("render", RENDERS / "skull.png"),
+    "skull-2026": ("photo", None),      # the artwork itself, colourised, rather than a render of the skull
     "mp3-player": ("render", GEN / "mp3_concept_hero.webp"),
     "ryan-logo": ("logo", CACHE / "logos" / "mark-indigo.png"),
     "wheels": ("watch", None),
@@ -207,6 +208,8 @@ def make_cuts(projects):
             im = sticker(thumb, angle_for(slug))
         elif kind == "diecut":
             im = diecut(REPO / p["images"][0]["src"], angle_for(slug))
+        elif kind == "photo":
+            im = cover(Image.open(REPO / p["images"][0]["src"]).convert("RGB"), 1100, 1100)
         elif kind == "watch":
             im = watch(thumb)
         elif kind == "logo":
@@ -266,7 +269,7 @@ def og_project(p, cut):
         d.text((64, yy + 18), line, font=semi, fill=rgba(fg))
         yy += 40
     d.text((64, 566), "ryanlgriffith.com", font=mono, fill=rgba(fg))
-    if cut:
+    if cut and cut["kind"] != "photo":
         art = Image.open(FINAL / cut["src"]).convert("RGBA")
         art.thumbnail((500, 520))
         im.alpha_composite(art, (1200 - 40 - art.width + (500 - art.width) // 2, (630 - art.height) // 2))

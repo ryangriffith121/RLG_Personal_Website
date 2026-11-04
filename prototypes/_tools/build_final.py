@@ -11,7 +11,7 @@ final/data/portfolio.db
   Demos, Certifications
 final/media/p/<slug>/           web copies of every project image: stills as WebP (lossless for
                                 pixel art), animations as animated WebP
-final/media/thumbs, certs, about, flair
+final/media/thumbs, certs, about
 final/demos/<slug>/             the playable PICO-8 builds
 final/assets/data/globe-dots.js
 Originals stay where they are (_assets/, the project folders); only web copies go into final/.
@@ -27,57 +27,9 @@ FINAL = REPO / "final"
 SHARED = REPO / "prototypes" / "_shared"
 PIXEL = re.compile(r"the-kingdom|density|gatsby|rotation|typhlosion|deepwell|hollowdeep|interloper")
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-FLAIR = ["toucan.gif", "cherries.gif", "ship-firing.gif", "jett.gif", "anchor.gif", "freemovie.gif"]
-# sprites drawn on a solid backdrop: the desk gets them as transparent animated WebP instead
-CLEAR_BG = {"ship-firing.gif", "jett.gif", "anchor.gif"}
 # The live table lists disciplines alphabetically, but the site colours a project by its first one,
 # so projects whose main discipline is not first alphabetically are listed lead-first here.
 LEAD = {"bl4s-2026": ["engineer", "program", "art"]}
-
-
-def clear_background(src, dst):
-    """Saves a pixel sprite as lossless animated WebP with the backdrop around the drawing made
-    transparent. The fill runs in from the edges, so pixels of the backdrop colour enclosed by the
-    drawing (a face, the hole in a ring) keep their colour."""
-    im = Image.open(src)
-    frames, durations = [], []
-    for fr in ImageSequence.Iterator(im):
-        f = fr.convert("RGBA")
-        durations.append(fr.info.get("duration", im.info.get("duration", 100)) or 100)
-        w, h = f.size
-        px = f.load()
-        bg = px[0, 0][:3]
-        stack = [(x, y) for x in range(w) for y in (0, h - 1)] + [(x, y) for y in range(h) for x in (0, w - 1)]
-        seen = set()
-        while stack:
-            x, y = stack.pop()
-            if not (0 <= x < w and 0 <= y < h) or (x, y) in seen:
-                continue
-            seen.add((x, y))
-            if px[x, y][3] == 0 or px[x, y][:3] != bg:
-                continue
-            px[x, y] = (0, 0, 0, 0)
-            stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
-        frames.append(f)
-    frames[0].save(dst, format="WEBP", save_all=True, append_images=frames[1:], duration=durations, loop=0, lossless=True, quality=100, method=6)
-    # the animation must play back exactly these frames at the same times (the encoder may merge
-    # identical neighbours into one longer frame, which is fine)
-    dec = Image.open(dst)
-    out, starts, t = [], [], 0
-    for f in ImageSequence.Iterator(dec):
-        out.append(f.convert("RGBA"))
-        starts.append(t)
-        t += f.info.get("duration", 0)
-    assert t == sum(durations), f"{dst.name}: plays {t} ms, source {sum(durations)} ms"
-    t = 0
-    for a, d in zip(frames, durations):
-        b = out[max(k for k, s in enumerate(starts) if s <= t)]
-        pa, pb = a.load(), b.load()
-        for y in range(a.height):
-            for x in range(a.width):
-                if pa[x, y][3] != pb[x, y][3] or (pa[x, y][3] and pa[x, y][:3] != pb[x, y][:3]):
-                    raise AssertionError(f"{dst.name}: frame at {t} ms differs at {x},{y}")
-        t += d
 
 
 def load_data():
@@ -243,16 +195,6 @@ def main():
     pr = data["profile"]
     for key in ("portrait", "portraitDuo"):
         web_copy(pr[key], "media/about")
-    flair = FINAL / "media" / "flair"
-    flair.mkdir(parents=True, exist_ok=True)
-    for stale in ("alien-ships.webp", "casio.webp", *CLEAR_BG):
-        (flair / stale).unlink(missing_ok=True)
-    for name in FLAIR:
-        src = SHARED / "media" / "archive" / name
-        if name in CLEAR_BG:
-            clear_background(src, flair / (Path(name).stem + ".webp"))
-        else:
-            shutil.copy2(src, flair / name)
     (FINAL / "assets" / "data").mkdir(parents=True, exist_ok=True)
     shutil.copy2(SHARED / "data" / "globe-dots.js", FINAL / "assets" / "data" / "globe-dots.js")
     print("tables", counts)

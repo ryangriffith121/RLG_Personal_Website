@@ -1,7 +1,7 @@
 /* RyanLGriffith.com: behaviour layered on top of what PHP already rendered, so every page still
    reads without it. Shared: the menu, the search palette (/ or Ctrl+K), stretch-to-fit type,
    reveals, counters and the lightbox. Per page: the work index filters, the project gallery, the
-   arcade, the about desk and certificates. */
+   arcade and the about page's certificates. */
 (function () {
   'use strict';
   const doc = document.documentElement;
@@ -207,7 +207,7 @@
     const PAGES = [
       { t: 'Home', h: './', w: 'home start front' },
       { t: 'Work — every project', h: 'portfolio.php', w: 'work index portfolio projects all timeline' },
-      { t: 'About Ryan', h: 'about.php', w: 'about bio toolbox tools certifications certificates desk' },
+      { t: 'About Ryan', h: 'about.php', w: 'about bio toolbox tools certifications certificates' },
       { t: 'Demos — play in the browser', h: 'demos.php', w: 'demos arcade games pico-8 pico8 play' },
       { t: 'Contact', h: '#contact', w: 'contact github linkedin email hello' },
     ];
@@ -549,51 +549,12 @@
     if (location.hash.length > 1) fromHash();
   }
 
-  /* ------------------------------------------------------------ about: certificates and the desk */
+  /* ------------------------------------------------------------ about: certificates */
   function certificates() {
     const btns = $$('[data-cert]');
     if (!btns.length) return;
     const list = btns.map((b) => ({ src: b.dataset.src, cap: b.dataset.cap, alt: b.dataset.cap }));
     btns.forEach((b, i) => b.addEventListener('click', () => lightbox(list, i, { title: 'Certifications' })));
-  }
-  function desk() {
-    const area = $('#desk');
-    if (!area) return;
-    let z = 10;
-    $$('.flair', area).forEach((el) => {
-      let sx = 0, sy = 0, ox = 0, oy = 0, id = null, moved = false, lim = null;
-      el.addEventListener('dragstart', (e) => e.preventDefault());
-      el.addEventListener('pointerdown', (e) => {
-        if (e.button !== 0 || id !== null) return;
-        id = e.pointerId;
-        moved = false;
-        sx = e.clientX;
-        sy = e.clientY;
-        ox = parseFloat(el.style.getPropertyValue('--x')) || 0;
-        oy = parseFloat(el.style.getPropertyValue('--y')) || 0;
-        const w = el.offsetWidth, h = el.offsetHeight;
-        lim = { x0: -el.offsetLeft, x1: area.clientWidth - el.offsetLeft - w, y0: -el.offsetTop, y1: area.clientHeight - el.offsetTop - h };
-        try { el.setPointerCapture(id); } catch (err) { /* capture is a nicety */ }
-      });
-      el.addEventListener('pointermove', (e) => {
-        if (e.pointerId !== id) return;
-        const dx = e.clientX - sx, dy = e.clientY - sy;
-        if (!moved && Math.hypot(dx, dy) < 6) return;
-        if (!moved) { moved = true; el.classList.add('is-drag'); el.style.zIndex = String(++z); }
-        const x = Math.max(lim.x0, Math.min(lim.x1, ox + dx)), y = Math.max(lim.y0, Math.min(lim.y1, oy + dy));
-        el.style.setProperty('--x', `${Math.round(x)}px`);
-        el.style.setProperty('--y', `${Math.round(y)}px`);
-      });
-      const end = (e) => {
-        if (e.pointerId !== id) return;
-        id = null;
-        el.classList.remove('is-drag');
-        if (moved) setTimeout(() => { moved = false; }, 0);
-      };
-      el.addEventListener('pointerup', end);
-      el.addEventListener('pointercancel', end);
-      el.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = false; } });
-    });
   }
 
   /* ------------------------------------------------------------ start */
@@ -602,7 +563,7 @@
   if (page === 'portfolio') work();
   if (page === 'project') gallery();
   if (page === 'demos') arcade();
-  if (page === 'about') { certificates(); desk(); }
+  if (page === 'about') certificates();
   $$('.band__word').forEach(split);
   fit();
   fitDown();

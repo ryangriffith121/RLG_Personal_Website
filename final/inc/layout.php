@@ -160,10 +160,11 @@ function corners(string $c = ''): string
     return '<i class="rc' . ($c ? ' rc--' . e($c) : '') . '" aria-hidden="true"></i>';
 }
 
-/* the image for a project panel: its transparent cut-out when there is one, else the thumbnail */
+/* the image for a project panel: its transparent cut-out when there is one, else the thumbnail,
+   colourised (a "photo" cut-out is the artwork itself, so panels show the thumbnail like any photo) */
 function panel_img(array $p, bool $eager = false): string
 {
-    if ($p['cut']) {
+    if ($p['cut'] && $p['cut']['kind'] !== 'photo') {
         return '<div class="pimg pimg--cut">' . img($p['cut'], '', '', $eager) . '</div>';
     }
     return '<div class="pimg' . ($p['pixel'] ? ' pimg--pixel' : '') . '">' . img($p['thumb'], '', '', $eager) . '</div>';

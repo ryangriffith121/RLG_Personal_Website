@@ -58,7 +58,8 @@ page_head([
           <?php if ($p['status']): ?><span class="tag"><?= e($p['status']) ?></span><?php endif; ?>
         </div>
       </div>
-      <?php if ($p['cut']): ?><div class="phead__cut"><?= img($p['cut'], '', '', true) ?></div><?php endif; ?>
+      <?php if ($p['cut'] && $p['cut']['kind'] === 'photo'): ?><div class="phead__photo"><div class="pimg<?= $p['pixel'] ? ' pimg--pixel' : '' ?>"><?= img($p['cut'], '', '', true) ?></div><?= corners() ?></div>
+      <?php elseif ($p['cut']): ?><div class="phead__cut"><?= img($p['cut'], '', '', true) ?></div><?php endif; ?>
     </div>
   </header>
 
