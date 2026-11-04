@@ -463,7 +463,7 @@ a:hover .arr, button:hover .arr { transform: translateX(4px); }
 .pond__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 18px 40px; align-items: end; padding: clamp(56px, 7vw, 110px) var(--gut) clamp(24px, 3vw, 40px); }
 .pond__head p { color: var(--soft); }
 .pond__water { position: relative; height: clamp(360px, 62vh, 680px); margin: 0 var(--gut); border-radius: 32px; overflow: hidden; background: #1b1446; cursor: crosshair; touch-action: pan-y; }
-.pond__water canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.pond__water canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
 .pond__water::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none;
   box-shadow: inset 0 0 0 3px rgba(15, 14, 25, .55), inset 0 0 70px rgba(15, 14, 25, .45); }
 .pond__legend .dot--program { --c: var(--lav); box-shadow: none; }
@@ -471,6 +471,9 @@ a:hover .arr, button:hover .arr { transform: translateX(4px); }
 .pond__tip:empty, .pond__tip.is-idle { opacity: 0; }
 .pond__legend { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 16px var(--gut) 0; }
 .pond__legend li { display: inline-flex; align-items: center; gap: 8px; }
+.pond__koi { display: inline-flex; align-items: center; gap: 5px; }
+.pond__koi svg { display: block; width: 19px; height: 8px; fill: var(--lav); }
+.pond__koi svg + svg { width: 46px; height: 19px; }
 @media (max-width: 760px) { .pond__head { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- 404 ---------- */

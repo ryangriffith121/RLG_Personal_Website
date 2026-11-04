@@ -6,7 +6,8 @@ mosaic) with these additions:
 - **From Orbit:** the translucent header, plus the globe with the DESY, CERN and JPL routes.
 - **From Telemetry:** the search palette, the live feed along the bottom, the simple project data on
   each panel, and coloured rounded corners.
-- **New:** a pixel koi pond with one fish per project.
+- **New:** a koi pond with one fish per project, drawn as smooth vector shapes. A fish's size
+  follows how many images the project has.
 
 Everything in this folder is the website, with every asset it uses. Nothing loads from another
 server, and nothing renders 3D in the browser: the globe and the pond are plain Canvas 2D, and

@@ -1,9 +1,11 @@
-/* The pond: one pixel koi for every project. Colour is the discipline (lavender for programming,
-   chartreuse for engineering, pink for art), length grows with the number of images, and the
-   featured projects swim in gold. Point at a fish to see its project and click to open it (on a
-   touch screen, tap once to see it and again to open). Click open water to drop food.
-   Drawn into a small pixel buffer with Canvas 2D and scaled up with hard edges. It pauses
-   off-screen, and with reduced motion it holds one still frame. */
+/* The pond: one koi for every project. Colour is the discipline (lavender for programming,
+   chartreuse for engineering, pink for art), and the featured projects swim in gold. Size follows
+   the number of images: the koi with the most is about two and a half times as long as the one with
+   the fewest. Point at a fish to see its project and click to open it (on a touch screen, tap once
+   to see it and again to open). Click open water to drop food.
+   Everything is drawn as smooth vector shapes with Canvas 2D at the screen's own pixel density, in
+   "pond units" so the swimming feels the same at every size. It pauses off-screen, and with
+   reduced motion it holds one still frame. */
 (function () {
   'use strict';
   const host = document.querySelector('[data-pond]');
@@ -19,14 +21,13 @@
   host.insertBefore(canvas, host.firstChild);
   const ctx = canvas.getContext('2d', { alpha: false });
   if (!ctx) return;
+  const floor = document.createElement('canvas');          // the pond floor, drawn once per size
+  const fctx = floor.getContext('2d');
 
   const TAU = Math.PI * 2;
-  const SEGS = 8;
+  const SEGS = 10;                                           // points along each koi's spine
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const wrap = (a) => { a %= TAU; if (a > Math.PI) a -= TAU; if (a <= -Math.PI) a += TAU; return a; };
-  const hex = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
-  const pack = (c) => ((255 << 24) | (c[2] << 16) | (c[1] << 8) | c[0]) >>> 0;
-  const col = (h) => pack(hex(h));
   const hash = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
   const rng = (seed) => () => {
     seed = (seed + 0x6D2B79F5) | 0;
@@ -41,204 +42,228 @@
     art: { body: '#e5197f', patch: '#fcfff0', fin: '#ff6fb0' },
   };
   const GOLD = { body: '#ffc94a', fin: '#ffe08a', patch: { program: '#412db5', engineer: '#7f9a2e', art: '#e5197f' } };
-  const K = {
-    shadow: col('#100c30'), eye: col('#0f0e19'), pad: col('#b9d454'), padEdge: col('#86a131'), padVein: col('#dcf38a'),
-    padShadow: col('#110d33'), petal: col('#e5197f'), petalLight: col('#ff8fc4'), seed: col('#ffc94a'),
-    food: col('#ffc94a'), foodDark: col('#b8801a'),
+  const C = {
+    top: '#2a2066', bottom: '#140f38', stoneDark: 'rgba(13, 10, 40, 0.5)', stoneLight: 'rgba(58, 46, 138, 0.5)',
+    glint: '#c9c2f0', shadow: 'rgba(9, 6, 30, 0.5)', eye: '#0f0e19',
+    pad: '#b9d454', padEdge: '#86a131', padVein: '#dcf38a', padShadow: 'rgba(9, 6, 30, 0.45)',
+    petal: '#e5197f', petalLight: '#ff8fc4', seed: '#ffc94a', food: '#ffc94a', foodDark: '#b8801a', ripple: '#c9c2f0', ring: '#fcfff0',
   };
-  const LAV = hex('#aba2d4'), PAPER = hex('#fcfff0'), RIPPLE = hex('#c9c2f0');
 
-  /* ---------------------------------------------------------------- buffer */
-  let W = 0, H = 0, S = 4, img = null, buf = null, bg = null;
-  let A = null, B = null, Cs = null, Ds = null;
-  let padPx = [], padSh = [];
-  function mix(i, c, a) {
-    const v = buf[i];
-    const r = v & 255, g = (v >>> 8) & 255, b = (v >>> 16) & 255;
-    buf[i] = ((255 << 24) | ((b + (c[2] - b) * a) << 16) | ((g + (c[1] - g) * a) << 8) | (r + (c[0] - r) * a)) >>> 0;
-  }
-  function hline(x0, x1, y, c) {
-    if (y < 0 || y >= H) return;
-    if (x0 < 0) x0 = 0;
-    if (x1 > W - 1) x1 = W - 1;
-    const row = y * W;
-    for (let x = x0; x <= x1; x++) buf[row + x] = c;
-  }
-  /* pixels whose centres fall inside the circle */
-  function disc(cx, cy, r, c) {
-    const R = r + 0.3;
-    const y0 = Math.ceil(cy - R - 0.5), y1 = Math.floor(cy + R - 0.5);
-    for (let y = y0; y <= y1; y++) {
-      const dy = y + 0.5 - cy;
-      const h = R * R - dy * dy;
-      if (h < 0) continue;
-      const w = Math.sqrt(h);
-      hline(Math.ceil(cx - w - 0.5), Math.floor(cx + w - 0.5), y, c);
-    }
-  }
-  function tri(ax, ay, bx, by, cx, cy, c) {
-    const x0 = Math.max(0, Math.floor(Math.min(ax, bx, cx))), x1 = Math.min(W - 1, Math.ceil(Math.max(ax, bx, cx)));
-    const y0 = Math.max(0, Math.floor(Math.min(ay, by, cy))), y1 = Math.min(H - 1, Math.ceil(Math.max(ay, by, cy)));
-    const area = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
-    if (Math.abs(area) < 0.05) return;
-    const sgn = area > 0 ? 1 : -1;
-    for (let y = y0; y <= y1; y++) {
-      const py = y + 0.5;
-      for (let x = x0; x <= x1; x++) {
-        const px = x + 0.5;
-        const e0 = ((bx - ax) * (py - ay) - (by - ay) * (px - ax)) * sgn;
-        const e1 = ((cx - bx) * (py - by) - (cy - by) * (px - bx)) * sgn;
-        const e2 = ((ax - cx) * (py - cy) - (ay - cy) * (px - cx)) * sgn;
-        if (e0 >= 0 && e1 >= 0 && e2 >= 0) buf[y * W + x] = c;
-      }
-    }
-  }
-  function ring(cx, cy, r, c, a, dashed) {
-    const n = Math.max(10, Math.ceil(r * 7));
-    let prev = -1;
-    for (let k = 0; k < n; k++) {
-      if (dashed && (k % 4) > 1) continue;
-      const ang = (k / n) * TAU;
-      const x = Math.floor(cx + Math.cos(ang) * r), y = Math.floor(cy + Math.sin(ang) * r);
-      if (x < 0 || y < 0 || x >= W || y >= H) continue;
-      const i = y * W + x;
-      if (i === prev) continue;
-      prev = i;
-      mix(i, c, a);
-    }
-  }
-
-  /* the water floor: a gradient, scattered pebbles and darker edges, made once per size */
-  function buildBg() {
-    bg = new Uint32Array(W * H);
-    const top = hex('#2a2066'), bot = hex('#140f38'), dark = hex('#0d0a28'), peb = hex('#33287a');
-    const r = rng(99);
-    for (let y = 0; y < H; y++) {
-      const k = H > 1 ? y / (H - 1) : 0;
-      const base = [0, 1, 2].map((j) => top[j] + (bot[j] - top[j]) * k);
-      for (let x = 0; x < W; x++) {
-        let c = base;
-        const n = r();
-        if (n < 0.016) c = base.map((v, j) => v + (dark[j] - v) * 0.6);
-        else if (n < 0.024) c = base.map((v, j) => v + (peb[j] - v) * 0.7);
-        const d = Math.min(x, y, W - 1 - x, H - 1 - y);
-        if (d < 4) c = c.map((v, j) => v + (dark[j] - v) * ((4 - d) / 6));
-        bg[y * W + x] = pack(c.map(Math.round));
-      }
-    }
-  }
-
-  /* lily pads with a notch and veins, a few with a lotus; stored as pixel lists */
-  function buildPads() {
-    padPx = []; padSh = [];
-    const r = rng(7);
-    const R0 = clamp(Math.min(W, H) * 0.085, 5, 13);
-    const spots = [[0.09, 0.2], [0.91, 0.24], [0.83, 0.87], [0.2, 0.85], [0.6, 0.11]];
-    const seen = new Set();
-    spots.forEach(([fx, fy], k) => {
-      const R = R0 * (0.8 + r() * 0.45);
-      const cx = fx * W, cy = fy * H, notch = r() * TAU;
-      for (let y = Math.floor(cy - R - 1); y <= Math.ceil(cy + R + 1); y++) {
-        for (let x = Math.floor(cx - R - 1); x <= Math.ceil(cx + R + 1); x++) {
-          if (x < 0 || y < 0 || x >= W || y >= H) continue;
-          const dx = x + 0.5 - cx, dy = y + 0.5 - cy, d = Math.hypot(dx, dy);
-          if (d > R) continue;
-          const ang = Math.atan2(dy, dx);
-          if (Math.abs(wrap(ang - notch)) < 0.34 && d > R * 0.12) continue;
-          const i = y * W + x;
-          if (seen.has(i)) continue;
-          seen.add(i);
-          let c = K.pad;
-          if (d > R - 1.1) c = K.padEdge;
-          else if (d > R * 0.2 && Math.abs(wrap((ang - notch) * 7) ) < 0.45) c = K.padVein;
-          padPx.push(i, c);
-          const sx = x + 1, sy = y + 2;
-          if (sx < W && sy < H) padSh.push(sy * W + sx);
-        }
-      }
-      if (k === 1 || k === 3) {           // a lotus sits on two of them
-        const fx2 = Math.round(cx + Math.cos(notch + Math.PI) * R * 0.3), fy2 = Math.round(cy + Math.sin(notch + Math.PI) * R * 0.3);
-        const put = (dx, dy, c) => { const x = fx2 + dx, y = fy2 + dy; if (x >= 0 && y >= 0 && x < W && y < H) padPx.push(y * W + x, c); };
-        [[0, -2], [-2, 0], [2, 0], [0, 2]].forEach(([dx, dy]) => put(dx, dy, K.petal));
-        [[0, -1], [-1, 0], [1, 0], [0, 1]].forEach(([dx, dy]) => put(dx, dy, K.petalLight));
-        [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([dx, dy]) => put(dx, dy, K.petal));
-        put(0, 0, K.seed);
-      }
-    });
-  }
+  /* ---------------------------------------------------------------- size */
+  // the pond is measured in units of `U` CSS pixels: 2 on a phone, a 300-unit-wide pond from 900px up
+  let W = 0, H = 0, U = 4, D = 4, cw0 = 0, ch0 = 0, dpr0 = 0;
 
   /* ---------------------------------------------------------------- fish */
-  const fish = projects.map((p) => {
+  // length follows the number of images on a log scale, stretched over the range in the data
+  const LEN_MIN = 10, LEN_MAX = 24;
+  const imgs = projects.map((p) => Math.max(1, p.i || 1));
+  const lo = Math.log(Math.min(...imgs)), hi = Math.log(Math.max(...imgs));
+  const fish = projects.map((p, n) => {
     const r = rng(hash(p.s));
     const cat = SKIN[p.c && p.c[0]] ? p.c[0] : 'program';
     const skin = SKIN[cat];
-    const len = clamp(9 + 3 * Math.sqrt(Math.max(1, p.i || 1)), 11, 22);
+    const k = hi > lo ? (Math.log(imgs[n]) - lo) / (hi - lo) : 0.5;
+    const len = LEN_MIN + (LEN_MAX - LEN_MIN) * k;
     const patches = [];
     const np = 1 + Math.floor(r() * 3);
-    for (let k = 0; k < np; k++) { const u0 = 0.06 + r() * 0.55; patches.push([u0, u0 + 0.14 + r() * 0.2, Math.floor(r() * 3) - 1]); }
+    for (let j = 0; j < np; j++) { const u0 = 0.08 + r() * 0.5; patches.push([u0, u0 + 0.14 + r() * 0.22, Math.floor(r() * 3) - 1, r() * TAU]); }
     return {
-      p, len, half: len * 0.2, seg: len / (SEGS - 1), patches,
-      body: col(p.f ? GOLD.body : skin.body), fin: col(p.f ? GOLD.fin : skin.fin), patch: col(p.f ? GOLD.patch[cat] : skin.patch),
-      x: 0, y: 0, a: r() * TAU, v: 0, base: 3 + r() * 3.4, wob: r() * TAU, wander: r() * 100, spine: [],
+      p, k, len, half: len * (0.14 + 0.02 * k), seg: len / (SEGS - 1), sh: 1.4 + len * 0.03, patches,
+      body: p.f ? GOLD.body : skin.body, fin: p.f ? GOLD.fin : skin.fin, patch: p.f ? GOLD.patch[cat] : skin.patch,
+      x: 0, y: 0, a: r() * TAU, v: 0, base: (2.6 + r() * 3) * (0.8 + 0.45 * k), wob: r() * TAU, wander: r() * 100, spine: [],
     };
   });
-  const prof = (u) => (u < 0.3 ? 0.72 + u : 1 - ((u - 0.3) / 0.7) * 0.82);
+  fish.sort((a, b) => b.len - a.len);      // the big koi swim deeper, so the small ones stay in sight
+
+  // half-width along the body (0 = nose, 1 = tail root): a round head, widest a third of the way back
+  const prof = (u) => (u < 0.32 ? 0.66 + 0.34 * Math.sin((u / 0.32) * Math.PI / 2) : 0.16 + 0.84 * Math.cos(((u - 0.32) / 0.68) * Math.PI / 2));
+  // a point on the spine with the heading (fx, fy), the sideways normal (nx, ny) and the half-width
+  function at(f, u) {
+    const sp = f.spine, fi = clamp(u, 0, 1) * (SEGS - 1), i = Math.min(SEGS - 2, Math.floor(fi)), s = fi - i;
+    const a = sp[i], b = sp[i + 1];
+    let fx = a[0] - b[0], fy = a[1] - b[1];
+    const d = Math.hypot(fx, fy) || 1; fx /= d; fy /= d;
+    return { x: a[0] + (b[0] - a[0]) * s, y: a[1] + (b[1] - a[1]) * s, fx, fy, nx: -fy, ny: fx, w: f.half * prof(u) };
+  }
   function place(f) {
-    f.x = 6 + Math.random() * Math.max(1, W - 12);
-    f.y = 6 + Math.random() * Math.max(1, H - 12);
+    const m = Math.min(W, H) * 0.12;
+    f.x = m + Math.random() * Math.max(1, W - 2 * m);
+    f.y = m + Math.random() * Math.max(1, H - 2 * m);
     f.spine = [];
     for (let i = 0; i < SEGS; i++) f.spine.push([f.x - Math.cos(f.a) * f.seg * i, f.y - Math.sin(f.a) * f.seg * i]);
   }
 
-  function drawFish(f, shadow) {
-    const sp = f.spine;
-    const ox = shadow ? 2 : 0, oy = shadow ? 3 : 0;
-    const body = shadow ? K.shadow : f.body, fin = shadow ? K.shadow : f.fin;
-    let hx = sp[0][0] - sp[1][0], hy = sp[0][1] - sp[1][1];
-    let hl = Math.hypot(hx, hy) || 1; hx /= hl; hy /= hl;
-    let tx = sp[SEGS - 1][0] - sp[SEGS - 2][0], ty = sp[SEGS - 1][1] - sp[SEGS - 2][1];
-    let tl = Math.hypot(tx, ty) || 1; tx /= tl; ty /= tl;
-    // tail fin: a forked fan that wags
-    const T = sp[SEGS - 1], Lf = f.len * 0.3, wag = Math.sin(f.wob * 1.1) * 0.35;
-    const fan = (s) => { const ang = Math.atan2(ty, tx) + s * 0.55 + wag; return [T[0] + Math.cos(ang) * Lf + ox, T[1] + Math.sin(ang) * Lf + oy]; };
-    const l = fan(-1), r = fan(1);
-    const mid = [T[0] + Math.cos(Math.atan2(ty, tx) + wag) * Lf * 0.55 + ox, T[1] + Math.sin(Math.atan2(ty, tx) + wag) * Lf * 0.55 + oy];
-    tri(T[0] + ox, T[1] + oy, l[0], l[1], mid[0], mid[1], fin);
-    tri(T[0] + ox, T[1] + oy, mid[0], mid[1], r[0], r[1], fin);
-    // pectoral fins
-    const P = sp[1], pr = f.half * prof(1 / (SEGS - 1)), nx = -hy, ny = hx, flap = 0.75 + Math.sin(f.wob * 1.4) * 0.3, fl = f.half * 1.5;
-    [1, -1].forEach((s) => {
-      const bx = P[0] + nx * s * pr * 0.6 + ox, by = P[1] + ny * s * pr * 0.6 + oy;
-      const tipx = bx + (nx * s * Math.cos(flap) - hx * Math.sin(flap)) * fl, tipy = by + (ny * s * Math.cos(flap) - hy * Math.sin(flap)) * fl;
-      tri(bx, by, bx - hx * 2, by - hy * 2, tipx, tipy, fin);
-    });
-    // body: discs stamped along the spine
-    for (let i = 0; i < SEGS - 1; i++) {
-      const a = sp[i], b = sp[i + 1];
-      for (let s = 0; s < 1; s += 0.34) {
-        const u = (i + s) / (SEGS - 1);
-        disc(a[0] + (b[0] - a[0]) * s + ox, a[1] + (b[1] - a[1]) * s + oy, f.half * prof(u), body);
-      }
+  /* Each shape below adds clockwise sub-paths to the current path, so a whole koi can be filled in
+     one go (for its shadow) without the overlaps cancelling out. */
+  function bodyPath(f, ox, oy) {
+    const sp = f.spine, n = SEGS, Ls = [], Rs = [];
+    let hx = 1, hy = 0, w0 = 1, bx = -1, by = 0, wt = 1;
+    for (let i = 0; i < n; i++) {
+      const a = sp[i > 0 ? i - 1 : 0], b = sp[i < n - 1 ? i + 1 : n - 1];
+      let fx = a[0] - b[0], fy = a[1] - b[1];
+      const d = Math.hypot(fx, fy) || 1; fx /= d; fy /= d;
+      const w = f.half * prof(i / (n - 1)), x = sp[i][0] + ox, y = sp[i][1] + oy;
+      Ls.push([x - fy * w, y + fx * w]);
+      Rs.push([x + fy * w, y - fx * w]);
+      if (i === 0) { hx = fx; hy = fy; w0 = w; }
+      if (i === n - 1) { bx = -fx; by = -fy; wt = w; }
     }
-    if (shadow) return;
-    // patches
-    f.patches.forEach(([u0, u1, side]) => {
-      for (let u = u0; u < Math.min(0.95, u1); u += 0.05) {
-        const fi = u * (SEGS - 1), i = Math.min(SEGS - 2, Math.floor(fi)), s = fi - i;
-        const a = sp[i], b = sp[i + 1];
-        const dx = b[0] - a[0], dy = b[1] - a[1], dl = Math.hypot(dx, dy) || 1;
-        const rr = f.half * prof(u);
-        const px = a[0] + dx * s + (-dy / dl) * side * rr * 0.35, py = a[1] + dy * s + (dx / dl) * side * rr * 0.35;
-        disc(px, py, rr * 0.62, f.patch);
+    const k = w0 * 1.35, T = sp[n - 1];
+    ctx.moveTo(Rs[0][0], Rs[0][1]);
+    ctx.bezierCurveTo(Rs[0][0] + hx * k, Rs[0][1] + hy * k, Ls[0][0] + hx * k, Ls[0][1] + hy * k, Ls[0][0], Ls[0][1]);   // the nose
+    for (let i = 1; i < n - 1; i++) ctx.quadraticCurveTo(Ls[i][0], Ls[i][1], (Ls[i][0] + Ls[i + 1][0]) / 2, (Ls[i][1] + Ls[i + 1][1]) / 2);
+    ctx.lineTo(Ls[n - 1][0], Ls[n - 1][1]);
+    ctx.quadraticCurveTo(T[0] + ox + bx * wt * 1.6, T[1] + oy + by * wt * 1.6, Rs[n - 1][0], Rs[n - 1][1]);
+    for (let i = n - 2; i > 0; i--) ctx.quadraticCurveTo(Rs[i][0], Rs[i][1], (Rs[i][0] + Rs[i - 1][0]) / 2, (Rs[i][1] + Rs[i - 1][1]) / 2);
+    ctx.lineTo(Rs[0][0], Rs[0][1]);
+    ctx.closePath();
+  }
+  // the tail: a forked fan that wags a beat behind the body
+  function tailPath(f, ox, oy) {
+    const sp = f.spine, T = sp[SEGS - 1], P = sp[SEGS - 2];
+    let bx = T[0] - P[0], by = T[1] - P[1];
+    const bl = Math.hypot(bx, by) || 1; bx /= bl; by /= bl;
+    const ang = Math.atan2(by, bx) + Math.sin(f.wob * 1.1 - 0.8) * 0.3;
+    const L = f.len * 0.34, s = 0.5;
+    const rx = T[0] + ox - bx * f.seg * 0.35, ry = T[1] + oy - by * f.seg * 0.35;
+    const pt = (a, r) => [rx + Math.cos(ang + a) * r, ry + Math.sin(ang + a) * r];
+    const tipR = pt(-s, L), notch = pt(0, L * 0.6), tipL = pt(s, L);
+    const outR = pt(-s * 1.25, L * 0.55), inR = pt(-s * 0.6, L * 0.66), inL = pt(s * 0.6, L * 0.66), outL = pt(s * 1.25, L * 0.55);
+    ctx.moveTo(rx, ry);
+    ctx.quadraticCurveTo(outR[0], outR[1], tipR[0], tipR[1]);
+    ctx.quadraticCurveTo(inR[0], inR[1], notch[0], notch[1]);
+    ctx.quadraticCurveTo(inL[0], inL[1], tipL[0], tipL[1]);
+    ctx.quadraticCurveTo(outL[0], outL[1], rx, ry);
+    ctx.closePath();
+  }
+  // pectoral fins behind the head and smaller pelvic fins halfway down, paddling
+  function finsPath(f, ox, oy) {
+    const flap = Math.sin(f.wob * 1.3);
+    [[0.2, 0.23, 0.1, 2.2 + flap * 0.25], [0.57, 0.13, 0.055, 2.5 + flap * 0.12]].forEach(([u, fl, fw, spread]) => {
+      const q = at(f, u), h = Math.atan2(q.fy, q.fx), L = f.len * fl, Wd = f.len * fw;
+      [1, -1].forEach((s) => {
+        const a = h + s * spread;
+        const cx = q.x + q.nx * s * q.w * 0.7 + Math.cos(a) * L * 0.5 + ox, cy = q.y + q.ny * s * q.w * 0.7 + Math.sin(a) * L * 0.5 + oy;
+        ctx.moveTo(cx + Math.cos(a) * L * 0.5, cy + Math.sin(a) * L * 0.5);
+        ctx.ellipse(cx, cy, L * 0.5, Wd * 0.5, a, 0, TAU);
+      });
+    });
+  }
+  function patchesPath(f) {
+    f.patches.forEach(([u0, u1, side, ph]) => {
+      for (let u = u0; u <= u1; u += 0.045) {
+        const q = at(f, u), r = q.w * (0.56 + 0.16 * Math.sin(u * 21 + ph));
+        const x = q.x + q.nx * side * q.w * 0.38, y = q.y + q.ny * side * q.w * 0.38;
+        ctx.moveTo(x + r, y);
+        ctx.arc(x, y, r, 0, TAU);
       }
     });
-    // eyes
-    const r0 = f.half * prof(0);
-    const ex = sp[0][0] + hx * r0 * 0.25, ey = sp[0][1] + hy * r0 * 0.25;
-    [1, -1].forEach((s) => {
-      const x = Math.floor(ex + nx * s * r0 * 0.62), y = Math.floor(ey + ny * s * r0 * 0.62);
-      if (x >= 0 && y >= 0 && x < W && y < H) buf[y * W + x] = K.eye;
+  }
+  function drawKoi(f) {
+    // its shadow on the floor (and on any bigger koi below it), as one translucent shape
+    ctx.fillStyle = C.shadow;
+    ctx.beginPath();
+    tailPath(f, f.sh, f.sh * 1.4); finsPath(f, f.sh, f.sh * 1.4); bodyPath(f, f.sh, f.sh * 1.4);
+    ctx.fill();
+    ctx.fillStyle = f.fin;
+    ctx.globalAlpha = 0.9;
+    ctx.beginPath(); tailPath(f, 0, 0); ctx.fill();
+    ctx.beginPath(); finsPath(f, 0, 0); ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = f.body;
+    ctx.beginPath(); bodyPath(f, 0, 0); ctx.fill();
+    ctx.save();
+    ctx.clip();                                              // the markings stay inside the body
+    ctx.fillStyle = f.patch;
+    ctx.beginPath(); patchesPath(f); ctx.fill();
+    ctx.restore();
+    const e = at(f, 0.06), er = Math.max(0.42, f.len * 0.026);
+    ctx.fillStyle = C.eye;
+    ctx.beginPath();
+    [1, -1].forEach((s) => { const x = e.x + e.nx * s * e.w * 0.6, y = e.y + e.ny * s * e.w * 0.6; ctx.moveTo(x + er, y); ctx.arc(x, y, er, 0, TAU); });
+    ctx.fill();
+  }
+
+  /* ---------------------------------------------------------------- scenery */
+  // the floor: a deep gradient with scattered stones
+  function buildFloor() {
+    floor.width = canvas.width; floor.height = canvas.height;
+    fctx.setTransform(D, 0, 0, D, 0, 0);
+    const g = fctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, C.top); g.addColorStop(1, C.bottom);
+    fctx.fillStyle = g;
+    fctx.fillRect(-1, -1, W + 2, H + 2);
+    const r = rng(99), n = Math.round(W * H / 320);
+    for (let i = 0; i < n; i++) {
+      const x = r() * W, y = r() * H, s = 0.45 + r() * r() * 2, rot = r() * Math.PI;
+      fctx.fillStyle = r() < 0.55 ? C.stoneDark : C.stoneLight;
+      fctx.beginPath(); fctx.ellipse(x, y, s * 1.35, s, rot, 0, TAU); fctx.fill();
+    }
+  }
+  // lily pads with a notch and veins, two of them with a lotus; they drift a little
+  let pads = [];
+  function buildPads() {
+    const r = rng(7);
+    const R0 = clamp(Math.min(W, H) * 0.085, 5, 13);
+    pads = [[0.09, 0.2], [0.91, 0.24], [0.83, 0.87], [0.2, 0.85], [0.6, 0.11]].map(([fx, fy], k) => ({
+      x: fx * W, y: fy * H, R: R0 * (0.8 + r() * 0.45), notch: r() * TAU, ph: r() * TAU, lotus: k === 1 || k === 3,
+    }));
+  }
+  function padPath(p, ox, oy, R) {
+    const a = p.notch + Math.sin(t * 0.35 + p.ph) * 0.05;
+    const x = p.x + Math.sin(t * 0.3 + p.ph) * 0.25 + ox, y = p.y + Math.cos(t * 0.27 + p.ph) * 0.25 + oy;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.arc(x, y, R, a + 0.28, a - 0.28 + TAU);
+    ctx.closePath();
+    return [x, y, a];
+  }
+  function drawPad(p) {
+    ctx.fillStyle = C.padEdge;
+    padPath(p, 0, 0, p.R); ctx.fill();
+    ctx.fillStyle = C.pad;
+    const [x, y, a] = padPath(p, 0, 0, p.R - 0.75); ctx.fill();
+    ctx.strokeStyle = C.padVein;
+    ctx.lineWidth = 0.32;
+    ctx.beginPath();
+    for (let j = 1; j < 8; j++) {
+      const v = a + 0.28 + j * ((TAU - 0.56) / 8);
+      ctx.moveTo(x + Math.cos(v) * p.R * 0.16, y + Math.sin(v) * p.R * 0.16);
+      ctx.lineTo(x + Math.cos(v) * p.R * 0.8, y + Math.sin(v) * p.R * 0.8);
+    }
+    ctx.stroke();
+    if (!p.lotus) return;
+    const lx = x + Math.cos(a + Math.PI) * p.R * 0.3, ly = y + Math.sin(a + Math.PI) * p.R * 0.3, s = p.R;
+    const petals = (n, dist, rl, rw, rot, col) => {
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      for (let j = 0; j < n; j++) {
+        const v = rot + (j / n) * TAU, cx = lx + Math.cos(v) * dist, cy = ly + Math.sin(v) * dist;
+        ctx.moveTo(cx + Math.cos(v) * rl, cy + Math.sin(v) * rl);
+        ctx.ellipse(cx, cy, rl, rw, v, 0, TAU);
+      }
+      ctx.fill();
+    };
+    petals(8, s * 0.2, s * 0.2, s * 0.085, p.ph, C.petal);
+    petals(6, s * 0.1, s * 0.13, s * 0.065, p.ph + 0.3, C.petalLight);
+    ctx.fillStyle = C.seed;
+    ctx.beginPath(); ctx.arc(lx, ly, s * 0.075, 0, TAU); ctx.fill();
+  }
+  // glints of light on the floor that drift with the current and fade in and out
+  let glints = [];
+  function buildGlints() {
+    const r = rng(31), n = Math.round(clamp(W * H / 1300, 14, 60));
+    glints = Array.from({ length: n }, () => ({ x: r() * W, y: r() * H, l: 2.5 + r() * 4.5, ph: r() * TAU, sp: 0.4 + r() * 0.5 }));
+  }
+  function drawGlints() {
+    ctx.strokeStyle = C.glint;
+    ctx.lineWidth = 0.42;
+    glints.forEach((g) => {
+      const x = ((g.x + t * g.sp) % (W + 10)) - 5, y = g.y + Math.sin(t * 0.5 + g.ph) * 0.6;
+      ctx.globalAlpha = 0.05 + 0.11 * (0.5 + 0.5 * Math.sin(t * 0.9 + g.ph));
+      ctx.beginPath(); ctx.moveTo(x - g.l / 2, y); ctx.quadraticCurveTo(x, y - g.l * 0.28, x + g.l / 2, y); ctx.stroke();
     });
+    ctx.globalAlpha = 1;
   }
 
   /* ---------------------------------------------------------------- simulation */
@@ -265,20 +290,21 @@
       f.wander += dt;
       f.a += (Math.sin(f.wander * 1.3 + f.base) * 0.7 + Math.sin(f.wander * 0.41) * 0.5) * dt;
       let speed = f.base;
-      const m = 9;
+      const m = 6 + f.len * 0.35;
       if (f.x < m || f.x > W - m || f.y < m || f.y > H - m) steer(Math.atan2(H / 2 - f.y, W / 2 - f.x), 2.6);
       for (let j = 0; j < fish.length; j++) {
         const g = fish[j];
         if (g === f) continue;
-        const dx = f.x - g.x, dy = f.y - g.y, d2 = dx * dx + dy * dy;
-        if (d2 < 30 && d2 > 0.01) steer(Math.atan2(dy, dx), 0.9);
+        const dx = f.x - g.x, dy = f.y - g.y, d2 = dx * dx + dy * dy, R = 2 + (f.half + g.half) * 1.3;
+        if (d2 < R * R && d2 > 0.01) steer(Math.atan2(dy, dx), 0.9);
       }
       let target = null, best = 72 * 72;
       food.forEach((fd) => { const dx = fd.x - f.x, dy = fd.y - f.y, d2 = dx * dx + dy * dy; if (d2 < best) { best = d2; target = fd; } });
       if (target) {
         steer(Math.atan2(target.y - f.y, target.x - f.x), 4.2);
         speed = f.base * 2.6;
-        if (best < 5) {
+        const reach = 1.5 + f.half * 0.6;
+        if (best < reach * reach) {
           food.splice(food.indexOf(target), 1);
           ripples.push({ x: target.x, y: target.y, r: 0.5, max: 5, life: 1 });
         }
@@ -288,7 +314,7 @@
       }
       if (f === hover || f === picked) speed *= 0.12;
       f.v += (speed - f.v) * Math.min(1, dt * 2);
-      f.wob += dt * (2.2 + f.v * 0.9);
+      f.wob += dt * (2.2 + f.v * 0.9) * (1.15 - 0.35 * f.k);     // small koi beat their tails faster
       const swim = f.a + Math.sin(f.wob) * 0.2;
       f.x = clamp(f.x + Math.cos(swim) * f.v * dt, 1, W - 1);
       f.y = clamp(f.y + Math.sin(swim) * f.v * dt, 1, H - 1);
@@ -302,62 +328,56 @@
     });
   }
 
-  function caustics() {
-    for (let x = 0; x < W; x++) A[x] = Math.sin(x * 0.29 + t * 0.9);
-    for (let y = 0; y < H; y++) B[y] = Math.sin(y * 0.41 - t * 0.7);
-    for (let k = 0; k < W + H; k++) { Cs[k] = Math.sin(k * 0.17 + t * 0.45); Ds[k] = Math.sin(k * 0.23 - t * 0.6); }
-    for (let y = 0; y < H; y++) {
-      const row = y * W, b = B[y];
-      for (let x = 0; x < W; x++) {
-        const v = A[x] + b + Cs[x + y] + Ds[x - y + H];
-        if (v > 2.6) mix(row + x, LAV, 0.16);
-        else if (v > 2.15) mix(row + x, LAV, 0.07);
-      }
-    }
-  }
-
   function draw() {
-    if (!buf) return;
-    buf.set(bg);
-    caustics();
-    for (let i = 0; i < padSh.length; i++) buf[padSh[i]] = K.padShadow;
-    fish.forEach((f) => drawFish(f, true));
-    fish.forEach((f) => drawFish(f, false));
-    ripples.forEach((rp) => ring(rp.x, rp.y, rp.r, RIPPLE, 0.55 * rp.life, false));
-    for (let i = 0; i < padPx.length; i += 2) buf[padPx[i]] = padPx[i + 1];
+    if (!W) return;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(floor, 0, 0);
+    ctx.setTransform(D, 0, 0, D, 0, 0);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    drawGlints();
+    fish.forEach(drawKoi);
+    ctx.strokeStyle = C.ripple;
+    ctx.lineWidth = 0.45;
+    ripples.forEach((rp) => { ctx.globalAlpha = 0.55 * rp.life; ctx.beginPath(); ctx.arc(rp.x, rp.y, rp.r, 0, TAU); ctx.stroke(); });
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = C.padShadow;
+    pads.forEach((p) => { padPath(p, 1, 2, p.R); ctx.fill(); });
+    pads.forEach(drawPad);
+    ctx.strokeStyle = C.foodDark;
+    ctx.lineWidth = 0.25;
     food.forEach((fd) => {
-      const x = Math.floor(fd.x), y = Math.floor(fd.y);
-      const c = fd.age > 11 ? K.foodDark : K.food;
-      hline(x, x + 1, y, c);
-      hline(x, x, y + 1, c);
-      hline(x + 1, x + 1, y + 1, K.foodDark);
+      ctx.fillStyle = fd.age > 11 ? C.foodDark : C.food;
+      ctx.beginPath(); ctx.arc(fd.x, fd.y, 0.7, 0, TAU); ctx.fill(); ctx.stroke();
     });
-    [hover, picked].forEach((f) => {
-      if (!f) return;
-      const m = f.spine[Math.floor(SEGS / 2)];
-      ring(m[0], m[1], f.len * 0.62 + 1, PAPER, 0.95, true);
+    ctx.strokeStyle = C.ring;
+    ctx.lineWidth = 0.5;
+    ctx.setLineDash([1.6, 1.4]);
+    ctx.lineDashOffset = -t * 3;
+    [hover, picked].forEach((f, j) => {
+      if (!f || (j === 1 && f === hover)) return;
+      const m = at(f, 0.42);
+      ctx.beginPath(); ctx.arc(m.x, m.y, f.len * 0.62 + 1.2, 0, TAU); ctx.stroke();
     });
-    ctx.putImageData(img, 0, 0);
+    ctx.setLineDash([]);
   }
 
-  /* ---------------------------------------------------------------- size */
   function resize() {
     const cw = host.clientWidth, ch = host.clientHeight;
     if (!cw || !ch) return;
-    const s = cw < 600 ? 2 : Math.max(3, Math.round(cw / 300));   // finer pixels on narrow ponds, so 32 koi still have room
-    const w = Math.ceil(cw / s), h = Math.ceil(ch / s);
-    if (w === W && h === H && s === S && buf) return;
-    const first = !buf;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (cw === cw0 && ch === ch0 && dpr === dpr0) return;
+    const first = !W;
+    const u = cw < 600 ? 2 : Math.max(3, cw / 300);       // finer units on narrow ponds, so 32 koi still have room
+    const w = cw / u, h = ch / u;
     const sx = W ? w / W : 1, sy = H ? h / H : 1;
-    W = w; H = h; S = s;
-    canvas.width = W; canvas.height = H;
-    canvas.style.width = `${W * S}px`;
-    canvas.style.height = `${H * S}px`;
-    img = ctx.createImageData(W, H);
-    buf = new Uint32Array(img.data.buffer);
-    A = new Float32Array(W); B = new Float32Array(H); Cs = new Float32Array(W + H + 1); Ds = new Float32Array(W + H + 1);
-    buildBg();
+    cw0 = cw; ch0 = ch; dpr0 = dpr;
+    W = w; H = h; U = u; D = dpr * u;
+    canvas.width = Math.round(cw * dpr);
+    canvas.height = Math.round(ch * dpr);
+    buildFloor();
     buildPads();
+    buildGlints();
     if (first) fish.forEach(place);
     else fish.forEach((f) => { f.spine.forEach((p) => { p[0] = clamp(p[0] * sx, 1, W - 1); p[1] = clamp(p[1] * sy, 1, H - 1); }); f.x = f.spine[0][0]; f.y = f.spine[0][1]; });
     food.length = 0;
@@ -367,15 +387,17 @@
   }
 
   /* ---------------------------------------------------------------- input */
-  const local = (e) => { const r = canvas.getBoundingClientRect(); return { x: (e.clientX - r.left) / S, y: (e.clientY - r.top) / S }; };
+  const local = (e) => { const r = canvas.getBoundingClientRect(); return { x: (e.clientX - r.left) / U, y: (e.clientY - r.top) / U }; };
+  // the topmost koi under the pointer, or failing that the nearest one within 8 CSS pixels
   function hit(x, y) {
-    let best = null, bd = Infinity;
-    fish.forEach((f) => {
-      f.spine.forEach((p, i) => {
-        const d = Math.hypot(p[0] - x, p[1] - y) - (f.half * prof(i / (SEGS - 1)) + 1.6);
-        if (d < 0 && d < bd) { bd = d; best = f; }
-      });
-    });
+    let best = null, bd = 8 / U;
+    for (let j = fish.length - 1; j >= 0; j--) {
+      const f = fish[j];
+      let d = Infinity;
+      for (let i = 0; i < SEGS; i++) { const p = f.spine[i]; d = Math.min(d, Math.hypot(p[0] - x, p[1] - y) - f.half * prof(i / (SEGS - 1))); }
+      if (d <= 0) return f;
+      if (d < bd) { bd = d; best = f; }
+    }
     return best;
   }
   const CAT = { program: 'PRG', engineer: 'ENG', art: 'ART' };
@@ -407,7 +429,9 @@
   });
   canvas.addEventListener('click', (e) => {
     const p = local(e);
-    const f = hit(p.x, p.y);
+    // a mouse opens the koi the tip is showing: clicks report whole pixels while pointer moves don't,
+    // and the koi may have drifted a little since the pointer last moved
+    const f = downType === 'mouse' && hover ? hover : hit(p.x, p.y);
     if (f) {
       if (downType !== 'mouse' && picked !== f) { picked = f; setTip(f, true); kick(); return; }
       location.href = `project.php?id=${encodeURIComponent(f.p.s)}`;

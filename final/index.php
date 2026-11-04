@@ -4,6 +4,9 @@ $c = counts();
 $all = projects();
 $picks = array_values(array_filter(array_map('project', ['bl4s-2026', 'hollowdeep', 'deepwell', 'custom-calc', 'skull-2026', 'raycast-fps'])));
 $latest = array_slice($all, 0, 9);          // one big tile + eight: fills the 4- and 2-column grids exactly
+// the koi pond sizes each fish by its number of images; the legend shows the range
+$imgCounts = array_map(function ($p) { return max(1, count($p['images'])); }, $all) ?: [1];
+$koi = '<svg viewBox="0 0 48 20" aria-hidden="true" focusable="false"><path d="M46 10C46 6.2 41.5 5 36 5 28 5 20.5 8 14 8.9v2.2c6.5.9 14 3.9 22 3.9 5.5 0 10-1.2 10-5ZM17 10C13 8.5 8 4 2 3.2 4.6 6.4 6 8.4 7.2 10 6 11.6 4.6 13.6 2 16.8 8 16 13 11.5 17 10Z"/></svg>';
 $deckThemes = ['t-indigo', 't-lime', 't-pink', 't-ink', 't-paper', 't-deep'];
 // great-circle distance from Boulder, worked out the same way globe.js does for its labels
 $km = function (float $lat, float $lon): string {
@@ -109,6 +112,7 @@ page_head([
     </div>
     <ul class="pond__legend mono" aria-label="Legend">
       <li><i class="dot dot--program"></i>Programming</li><li><i class="dot dot--engineer"></i>Engineering</li><li><i class="dot dot--art"></i>Art</li><li><i class="dot dot--gold"></i>Featured</li>
+      <li class="pond__size"><span class="pond__koi"><?= $koi . $koi ?></span>Size: <?= min($imgCounts) ?> to <?= max($imgCounts) ?> images</li>
     </ul>
   </section>
 <?php page_foot(['scripts' => ['assets/data/globe-dots.js', 'assets/js/globe.js', 'assets/js/pond.js']]);
